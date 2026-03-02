@@ -3328,6 +3328,10 @@ RISKS:
         if (!CFG.anthropicKey) { fmtAI('⚠️ No AI API key configured.\n\nTo enable AI analysis:\n1. Go to ⚙ SETTINGS → API Keys\n2. Enter your Google Gemini key (begins with AIZA...)\n3. Click SAVE\n\nGet a completely FREE key at: aistudio.google.com/app/apikey'); return; }
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CFG.anthropicKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
         const d = await res.json();
+        if (d.error) {
+          fmtAI(`⚠️ API Error: ${d.error.message || 'Invalid key or unavailable.'}`);
+          return;
+        }
         fmtAI(d.candidates?.[0]?.content?.parts?.[0]?.text || 'No response');
       } catch {
         const pf = parseFloat(p) || 100;
@@ -3378,8 +3382,12 @@ RISKS:
         if (!CFG.anthropicKey) { document.getElementById('aiOut').innerHTML = '<span style="color:var(--warn)">⚠️ Enter Gemini key in ⚙ SETTINGS to enable free AI.</span>'; return; }
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CFG.anthropicKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: `Expert stock market analyst. Concise answer with specific price levels:\n${q}` }] }] }) });
         const d = await res.json();
+        if (d.error) {
+          document.getElementById('aiOut').innerHTML = `<span style="color:var(--warn)">⚠️ API Error: ${d.error.message}</span>`;
+          return;
+        }
         document.getElementById('aiOut').innerHTML = (d.candidates?.[0]?.content?.parts?.[0]?.text || '').replace(/\n/g, '<br>');
-      } catch { document.getElementById('aiOut').innerHTML = 'AI unavailable.'; }
+      } catch (err) { document.getElementById('aiOut').innerHTML = 'AI unavailable: ' + err.message; }
       document.getElementById('qAsk').value = '';
     }
 
