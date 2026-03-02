@@ -1,0 +1,3705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="INTELLIS MARKET MATRIX AI">
+  <meta name="theme-color" content="#020b14">
+  <link rel="apple-touch-icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 180 180%22><rect fill=%22%23020b14%22 width=%22180%22 height=%22180%22 rx=%2230%22/><text x=%2250%25%22 y=%2255%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2288%22>%F0%9F%93%88</text></svg>">
+  <title>INTELLIS MARKET MATRIX AI v5 — Live Data</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #00050a;
+      --bg2: #061525;
+      --bg3: #0a1e30;
+      --panel: #081828;
+      --bdr: #0d3a5c;
+      --acc: #00f2ff;
+      --acc2: #00ff41;
+      --acc3: #ff6b35;
+      --warn: #ffcc00;
+      --red: #ff3b5c;
+      --grn: #00e676;
+      --txt: #cce8ff;
+      --dim: #4a7a9b
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--txt);
+      font-family: 'Rajdhani', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-size: 14px
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(0, 198, 255, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 198, 255, 0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0
+    }
+
+    /* HEADER */
+    header {
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      background: linear-gradient(180deg, rgba(0, 198, 255, 0.07) 0%, transparent 100%);
+      border-bottom: 1px solid var(--bdr);
+      flex-shrink: 0
+    }
+
+    .logo {
+      font-family: 'Orbitron', monospace;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, var(--acc), var(--acc2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent
+    }
+
+    .hright {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .mpill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border: 1px solid var(--bdr);
+      border-radius: 20px;
+      font-size: 11px;
+      font-family: 'Share Tech Mono', monospace
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--grn);
+      box-shadow: 0 0 6px var(--grn);
+      animation: pulse 2s infinite;
+      flex-shrink: 0
+    }
+
+    .dot.warn {
+      background: var(--warn);
+      box-shadow: 0 0 6px var(--warn);
+      animation: pulse 1s infinite
+    }
+
+    .dot.off {
+      background: var(--dim);
+      animation: none;
+      box-shadow: none
+    }
+
+    .dot.red {
+      background: var(--red);
+      box-shadow: 0 0 6px var(--red);
+      animation: none
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
+    }
+
+    #clk {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--acc)
+    }
+
+    .hbtn {
+      background: rgba(0, 198, 255, 0.1);
+      border: 1px solid var(--bdr);
+      color: var(--acc);
+      padding: 4px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all .2s
+    }
+
+    .hbtn:hover {
+      background: rgba(0, 198, 255, 0.2);
+      border-color: var(--acc)
+    }
+
+    .hbtn.o {
+      background: rgba(255, 107, 53, 0.15);
+      border-color: rgba(255, 107, 53, 0.5);
+      color: var(--acc3)
+    }
+
+    .hbtn.o:hover {
+      background: rgba(255, 107, 53, 0.25)
+    }
+
+    .hbtn.y {
+      background: rgba(255, 204, 0, 0.12);
+      border-color: rgba(255, 204, 0, 0.4);
+      color: var(--warn)
+    }
+
+    .hbtn.y:hover {
+      background: rgba(255, 204, 0, 0.2)
+    }
+
+    .hbtn.key {
+      background: rgba(0, 230, 118, 0.1);
+      border-color: rgba(0, 230, 118, 0.4);
+      color: var(--grn)
+    }
+
+    .hbtn.key:hover {
+      background: rgba(0, 230, 118, 0.2)
+    }
+
+    /* TICKER */
+    .ticker-bar {
+      z-index: 10;
+      background: rgba(0, 198, 255, 0.03);
+      border-bottom: 1px solid var(--bdr);
+      overflow: hidden;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center
+    }
+
+    .ticker-inner {
+      display: flex;
+      gap: 80px;
+      animation: scrollL 120s linear infinite;
+      white-space: nowrap;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      padding: 0 20px;
+      letter-spacing: .3px
+    }
+
+    .ticker-inner:hover {
+      animation-play-state: paused
+    }
+
+    @keyframes scrollL {
+      0% {
+        transform: translateX(100vw)
+      }
+
+      100% {
+        transform: translateX(-300%)
+      }
+    }
+
+    .tu {
+      color: var(--grn)
+    }
+
+    .td {
+      color: var(--red)
+    }
+
+    .tn {
+      color: var(--warn)
+    }
+
+    .tlbl {
+      color: var(--acc);
+      font-size: 10px
+    }
+
+    /* LAYOUT */
+    .layout {
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 310px 1fr 290px;
+      flex: 1;
+      overflow: hidden
+    }
+
+    /* PANEL */
+    .panel {
+      background: var(--panel);
+      border-right: 1px solid var(--bdr);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--bdr);
+      flex-shrink: 0
+    }
+
+    .tab {
+      flex: 1;
+      padding: 7px 2px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--dim);
+      border-bottom: 2px solid transparent;
+      transition: all .2s;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: .5px
+    }
+
+    .tab.on {
+      color: var(--acc);
+      border-bottom-color: var(--acc);
+      background: rgba(0, 198, 255, 0.05)
+    }
+
+    .tab:hover:not(.on) {
+      color: var(--txt)
+    }
+
+    .tp {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden
+    }
+
+    .tp.on {
+      display: flex
+    }
+
+    .tp::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .tp::-webkit-scrollbar-thumb {
+      background: var(--bdr)
+    }
+
+    /* STOCK ROW */
+    .srow {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px;
+      align-items: center;
+      padding: 8px 10px 8px 13px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.4);
+      cursor: pointer;
+      transition: background .15s;
+      position: relative
+    }
+
+    .srow::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--dim);
+      transition: background .3s
+    }
+
+    .srow.up::before {
+      background: var(--grn)
+    }
+
+    .srow.dn::before {
+      background: var(--red)
+    }
+
+    .srow.flash {
+      animation: flash .4s ease
+    }
+
+    @keyframes flash {
+
+      0%,
+      100% {
+        background: transparent
+      }
+
+      50% {
+        background: rgba(0, 198, 255, 0.08)
+      }
+    }
+
+    .srow:hover {
+      background: rgba(0, 198, 255, 0.03)
+    }
+
+    .ssym {
+      font-family: 'Orbitron', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--acc)
+    }
+
+    .sname {
+      font-size: 11px;
+      color: #6a9abf;
+      margin-top: 1px
+    }
+
+    .spnl {
+      font-size: 11px;
+      font-family: 'Share Tech Mono', monospace;
+      margin-top: 2px
+    }
+
+    .sprice {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: right
+    }
+
+    .schg {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      text-align: right;
+      padding: 2px 5px;
+      border-radius: 2px;
+      margin-top: 2px;
+      font-weight: 700
+    }
+
+    .pos {
+      color: var(--grn);
+      background: rgba(0, 230, 118, 0.1)
+    }
+
+    .neg {
+      color: var(--red);
+      background: rgba(255, 59, 92, 0.1)
+    }
+
+    .neu {
+      color: var(--warn)
+    }
+
+    .xbtn {
+      background: none;
+      border: none;
+      color: var(--dim);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 2px 4px;
+      line-height: 1;
+      transition: color .15s;
+      margin-top: 2px
+    }
+
+    .xbtn:hover {
+      color: var(--red)
+    }
+
+    /* SUMMARY */
+    .sumbox {
+      padding: 8px 12px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--bdr);
+      flex-shrink: 0
+    }
+
+    .sumlbl {
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 1px;
+      font-family: 'Share Tech Mono', monospace
+    }
+
+    .sumval {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 21px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 2px
+    }
+
+    /* FORMS */
+    .fsec {
+      padding: 8px 10px;
+      border-top: 1px solid var(--bdr);
+      background: var(--bg2);
+      flex-shrink: 0
+    }
+
+    .slbl {
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--dim);
+      margin-bottom: 5px
+    }
+
+    .frow {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 4px
+    }
+
+    input,
+    select {
+      background: var(--bg3);
+      border: 1px solid var(--bdr);
+      color: var(--txt);
+      padding: 5px 7px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 12px;
+      border-radius: 3px;
+      outline: none;
+      transition: border-color .2s;
+      width: 100%
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--acc)
+    }
+
+    input::placeholder {
+      color: var(--dim)
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--acc), #0090cc);
+      color: #000;
+      border: none;
+      padding: 6px 10px;
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all .2s;
+      white-space: nowrap
+    }
+
+    .btn:hover {
+      filter: brightness(1.15)
+    }
+
+    .bg {
+      background: linear-gradient(135deg, var(--grn), #00a855);
+      color: #000
+    }
+
+    .br {
+      background: linear-gradient(135deg, var(--red), #cc0030);
+      color: #fff
+    }
+
+    .bo {
+      background: linear-gradient(135deg, var(--acc3), #cc4400);
+      color: #fff
+    }
+
+    .by {
+      background: linear-gradient(135deg, var(--warn), #cc9900);
+      color: #000
+    }
+
+    .bgh {
+      background: transparent;
+      border: 1px solid var(--bdr);
+      color: var(--dim)
+    }
+
+    .bgh:hover {
+      border-color: var(--acc);
+      color: var(--acc)
+    }
+
+    .bw {
+      width: 100%
+    }
+
+    /* ALERTS */
+    .arow {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.4);
+      display: flex;
+      gap: 8px
+    }
+
+    .arow.new {
+      background: rgba(255, 107, 53, 0.07)
+    }
+
+    .asym {
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
+      color: var(--acc3);
+      margin-bottom: 1px
+    }
+
+    .amsg {
+      font-size: 11px;
+      color: var(--txt);
+      line-height: 1.4
+    }
+
+    .at {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      color: var(--dim);
+      margin-top: 2px
+    }
+
+    /* CENTER */
+    .ctr {
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--bdr);
+      overflow: hidden
+    }
+
+    .chartbox {
+      position: relative;
+      height: 228px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--bdr);
+      flex-shrink: 0
+    }
+
+    .chartbox canvas {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important
+    }
+
+    .cov {
+      position: absolute;
+      top: 10px;
+      left: 14px;
+      pointer-events: none;
+      z-index: 2
+    }
+
+    .csym {
+      font-family: 'Orbitron', monospace;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--acc)
+    }
+
+    .cprice {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 23px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1
+    }
+
+    .cchg {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px
+    }
+
+    .pbts {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 3px;
+      z-index: 2
+    }
+
+    .pbt {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--bdr);
+      color: var(--dim);
+      padding: 3px 7px;
+      font-size: 10px;
+      cursor: pointer;
+      border-radius: 2px;
+      font-family: 'Share Tech Mono', monospace;
+      transition: all .2s
+    }
+
+    .pbt.on,
+    .pbt:hover {
+      border-color: var(--acc);
+      color: var(--acc)
+    }
+
+    /* MOVER */
+    .mv {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.4);
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      transition: background .15s
+    }
+
+    .mv:hover {
+      background: rgba(0, 198, 255, 0.03)
+    }
+
+    .mvsym {
+      font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      color: var(--acc2);
+      font-weight: 700
+    }
+
+    .mvname {
+      font-size: 11px;
+      color: #6a9abf
+    }
+
+    .tags {
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+      margin-top: 3px
+    }
+
+    .tag {
+      padding: 1px 4px;
+      border-radius: 2px;
+      font-size: 9px;
+      font-weight: 700;
+      font-family: 'Share Tech Mono', monospace
+    }
+
+    .thot {
+      background: rgba(255, 107, 53, 0.2);
+      color: var(--acc3)
+    }
+
+    .tvol {
+      background: rgba(255, 204, 0, 0.15);
+      color: var(--warn)
+    }
+
+    .tbul {
+      background: rgba(0, 230, 118, 0.15);
+      color: var(--grn)
+    }
+
+    .tber {
+      background: rgba(255, 59, 92, 0.15);
+      color: var(--red)
+    }
+
+    .tbrk {
+      background: rgba(0, 198, 255, 0.15);
+      color: var(--acc)
+    }
+
+    .mvpct {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 16px;
+      font-weight: 700
+    }
+
+    .mvmeta {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      color: var(--dim);
+      margin-top: 2px
+    }
+
+    /* OPTIONS */
+    .orow {
+      display: grid;
+      grid-template-columns: 52px 40px 52px 52px 52px 1fr;
+      gap: 4px;
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.3);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      align-items: center;
+      cursor: pointer;
+      transition: background .15s
+    }
+
+    .orow:hover {
+      background: rgba(0, 198, 255, 0.03)
+    }
+
+    .ohd {
+      background: var(--bg2);
+      color: var(--dim);
+      font-size: 9px;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--bdr)
+    }
+
+    .cb {
+      background: rgba(0, 230, 118, 0.2);
+      color: var(--grn);
+      padding: 1px 3px;
+      border-radius: 2px;
+      font-size: 9px
+    }
+
+    .pb {
+      background: rgba(255, 59, 92, 0.2);
+      color: var(--red);
+      padding: 1px 3px;
+      border-radius: 2px;
+      font-size: 9px
+    }
+
+    .ub {
+      background: rgba(255, 204, 0, 0.15);
+      color: var(--warn);
+      padding: 1px 3px;
+      border-radius: 2px;
+      font-size: 9px
+    }
+
+    /* SQUEEZE */
+    .sqc {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.4);
+      cursor: pointer;
+      transition: background .15s
+    }
+
+    .sqc:hover {
+      background: rgba(255, 107, 53, 0.03)
+    }
+
+    .sqtop {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 5px
+    }
+
+    .sqsym {
+      font-family: 'Orbitron', monospace;
+      font-size: 13px;
+      color: var(--acc3)
+    }
+
+    .sqsc {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px
+    }
+
+    .sqbar {
+      width: 65px;
+      height: 4px;
+      background: var(--bg);
+      border-radius: 2px;
+      overflow: hidden
+    }
+
+    .sqfill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--warn), var(--acc3));
+      border-radius: 2px
+    }
+
+    .sqg {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px
+    }
+
+    .sqm {
+      background: var(--bg2);
+      padding: 3px 5px;
+      border-radius: 2px;
+      text-align: center
+    }
+
+    .sqml {
+      font-size: 8px;
+      color: var(--dim);
+      display: block;
+      font-family: 'Share Tech Mono', monospace
+    }
+
+    .sqmv {
+      font-size: 12px;
+      color: var(--warn);
+      font-family: 'Share Tech Mono', monospace
+    }
+
+    /* SCREENER */
+    .scrow {
+      display: grid;
+      grid-template-columns: 52px 1fr 55px 55px 50px;
+      gap: 4px;
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.3);
+      font-size: 11px;
+      cursor: pointer;
+      transition: background .15s;
+      align-items: center
+    }
+
+    .scrow:hover {
+      background: rgba(0, 198, 255, 0.03)
+    }
+
+    .schd {
+      background: var(--bg2);
+      color: var(--dim);
+      font-size: 9px;
+      letter-spacing: 1px;
+      font-family: 'Orbitron', monospace
+    }
+
+    /* NEWS */
+    .nrow {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.4);
+      cursor: pointer;
+      transition: background .15s
+    }
+
+    .nrow:hover {
+      background: rgba(0, 198, 255, 0.03)
+    }
+
+    .ntop {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px
+    }
+
+    .nticker {
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
+      color: var(--acc)
+    }
+
+    .nsrc {
+      font-size: 10px;
+      color: var(--dim)
+    }
+
+    .nhl {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #d8eeff
+    }
+
+    .nbot {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 3px
+    }
+
+    .sent {
+      padding: 1px 4px;
+      border-radius: 2px;
+      font-size: 9px;
+      font-weight: 700
+    }
+
+    .sbull {
+      background: rgba(0, 230, 118, 0.2);
+      color: var(--grn)
+    }
+
+    .sbear {
+      background: rgba(255, 59, 92, 0.2);
+      color: var(--red)
+    }
+
+    .sneu {
+      background: rgba(255, 204, 0, 0.15);
+      color: var(--warn)
+    }
+
+    /* EARNINGS */
+    .erow {
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.3);
+      display: grid;
+      grid-template-columns: 50px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      cursor: pointer;
+      transition: background .15s
+    }
+
+    .erow:hover {
+      background: rgba(0, 198, 255, 0.03)
+    }
+
+    .esym {
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      color: var(--acc)
+    }
+
+    .ebadge {
+      padding: 1px 5px;
+      border-radius: 2px;
+      font-size: 9px;
+      font-weight: 700
+    }
+
+    .ebm {
+      background: rgba(0, 198, 255, 0.15);
+      color: var(--acc)
+    }
+
+    .eac {
+      background: rgba(255, 107, 53, 0.15);
+      color: var(--acc3)
+    }
+
+    /* RIGHT */
+    .rp {
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--bdr);
+      overflow: hidden
+    }
+
+    .fgbox {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--bdr);
+      flex-shrink: 0;
+      text-align: center
+    }
+
+    .fglbl {
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--dim);
+      margin-bottom: 4px
+    }
+
+    .fgval {
+      font-family: 'Orbitron', monospace;
+      font-size: 28px;
+      font-weight: 900
+    }
+
+    .fgtxt {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-top: 1px
+    }
+
+    .fgtrack {
+      height: 6px;
+      background: linear-gradient(90deg, var(--red), var(--warn), var(--grn));
+      border-radius: 3px;
+      margin: 7px 0 3px;
+      position: relative
+    }
+
+    .fgneedle {
+      position: absolute;
+      top: -4px;
+      width: 2px;
+      height: 14px;
+      background: #fff;
+      border-radius: 1px;
+      transform: translateX(-50%);
+      box-shadow: 0 0 4px rgba(255, 255, 255, .5);
+      transition: left 1s ease
+    }
+
+    .fgends {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--dim);
+      font-family: 'Share Tech Mono', monospace
+    }
+
+    .mrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.3);
+      font-size: 11px
+    }
+
+    .ml {
+      color: var(--dim)
+    }
+
+    .mv2 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px
+    }
+
+    .irow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.3);
+      cursor: pointer;
+      transition: background .15s
+    }
+
+    .irow:hover {
+      background: rgba(0, 198, 255, 0.03)
+    }
+
+    .iname {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--txt)
+    }
+
+    .iprice {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      text-align: right;
+      font-weight: 700
+    }
+
+    .ichg {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      padding: 2px 4px;
+      border-radius: 2px;
+      font-weight: 700
+    }
+
+    .mbar {
+      height: 3px;
+      background: var(--bg);
+      border-radius: 2px;
+      margin-top: 2px;
+      overflow: hidden
+    }
+
+    .mfill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--red), var(--warn), var(--grn))
+    }
+
+    .secrow {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.2);
+      cursor: pointer;
+      transition: background .15s
+    }
+
+    .secrow:hover {
+      background: rgba(0, 198, 255, 0.03)
+    }
+
+    .secname {
+      width: 52px;
+      color: var(--dim);
+      font-size: 10px;
+      flex-shrink: 0
+    }
+
+    .secbarw {
+      flex: 1;
+      height: 10px;
+      background: var(--bg3);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative
+    }
+
+    .secfill {
+      height: 100%;
+      border-radius: 2px;
+      position: absolute;
+      top: 0
+    }
+
+    .secpct {
+      width: 40px;
+      text-align: right;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px
+    }
+
+    /* AI */
+    .aitb {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--bdr);
+      background: var(--bg2);
+      display: flex;
+      gap: 5px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      align-items: center
+    }
+
+    .aiout {
+      padding: 12px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+      color: #d8eeff;
+      flex: 1;
+      overflow-y: auto
+    }
+
+    .aiout::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .aiout::-webkit-scrollbar-thumb {
+      background: var(--bdr)
+    }
+
+    .aisec {
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--acc);
+      display: block;
+      margin: 8px 0 3px;
+      border-bottom: 1px solid rgba(0, 198, 255, .2);
+      padding-bottom: 2px
+    }
+
+    .aibuy {
+      color: var(--grn);
+      font-weight: bold;
+      font-size: 13px
+    }
+
+    .aisell {
+      color: var(--red);
+      font-weight: bold;
+      font-size: 13px
+    }
+
+    .aihold {
+      color: var(--warn);
+      font-weight: bold;
+      font-size: 13px
+    }
+
+    .aiprice {
+      color: var(--acc);
+      font-weight: bold
+    }
+
+    /* ALERT CONFIG */
+    .acfg {
+      padding: 8px 10px;
+      border-top: 1px solid var(--bdr);
+      background: var(--bg2);
+      flex-shrink: 0
+    }
+
+    .cfgrow {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 4px;
+      font-size: 11px
+    }
+
+    .cfglbl {
+      color: var(--dim);
+      width: 70px;
+      font-size: 10px;
+      flex-shrink: 0
+    }
+
+    /* STATUS BAR */
+    .sbar {
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 14px;
+      background: var(--bg2);
+      border-top: 1px solid var(--bdr);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: #5a8aab;
+      flex-shrink: 0
+    }
+
+    /* TOAST */
+    #toasts {
+      position: fixed;
+      top: 68px;
+      right: 14px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      pointer-events: none
+    }
+
+    .toast {
+      background: var(--bg3);
+      border: 1px solid var(--bdr);
+      border-left: 3px solid var(--acc3);
+      padding: 8px 12px;
+      min-width: 240px;
+      border-radius: 3px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, .7);
+      animation: tin .3s ease, tout .3s ease 4.7s forwards;
+      pointer-events: auto;
+      cursor: pointer
+    }
+
+    .toast.up {
+      border-left-color: var(--grn)
+    }
+
+    .toast.dn {
+      border-left-color: var(--red)
+    }
+
+    .toast.ai {
+      border-left-color: var(--acc)
+    }
+
+    .toast.warn {
+      border-left-color: var(--warn)
+    }
+
+    .tt {
+      font-weight: 700;
+      font-size: 12px;
+      color: #fff
+    }
+
+    .tb {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 1px
+    }
+
+    @keyframes tin {
+      from {
+        transform: translateX(110%);
+        opacity: 0
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1
+      }
+    }
+
+    @keyframes tout {
+      from {
+        opacity: 1
+      }
+
+      to {
+        opacity: 0;
+        pointer-events: none
+      }
+    }
+
+    /* MODAL */
+    .mbg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .82);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-backdrop-filter: blur(3px);
+      backdrop-filter: blur(3px)
+    }
+
+    .mbg.hide {
+      display: none
+    }
+
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--bdr);
+      border-radius: 5px;
+      width: 520px;
+      max-width: 95vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .8);
+      overflow: hidden
+    }
+
+    .mhd {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--bdr);
+      background: rgba(0, 198, 255, 0.05);
+      flex-shrink: 0
+    }
+
+    .mtitle {
+      font-family: 'Orbitron', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--acc)
+    }
+
+    .mclose {
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-size: 20px;
+      cursor: pointer;
+      line-height: 1;
+      transition: color .2s
+    }
+
+    .mclose:hover {
+      color: var(--red)
+    }
+
+    .mbody {
+      padding: 16px;
+      overflow-y: auto;
+      flex: 1
+    }
+
+    .mfoot {
+      padding: 10px 16px;
+      border-top: 1px solid var(--bdr);
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+      background: var(--bg3);
+      flex-shrink: 0
+    }
+
+    .ibox {
+      border-radius: 3px;
+      padding: 9px 12px;
+      font-size: 11px;
+      line-height: 1.6;
+      margin-bottom: 10px
+    }
+
+    .ibox.blu {
+      background: rgba(0, 198, 255, 0.06);
+      border: 1px solid rgba(0, 198, 255, 0.2);
+      color: var(--acc)
+    }
+
+    .ibox.grn {
+      background: rgba(0, 230, 118, 0.06);
+      border: 1px solid rgba(0, 230, 118, 0.2);
+      color: var(--grn)
+    }
+
+    .ibox.warn {
+      background: rgba(255, 204, 0, 0.06);
+      border: 1px solid rgba(255, 204, 0, 0.2);
+      color: var(--warn)
+    }
+
+    .ibox.red {
+      background: rgba(255, 59, 92, 0.06);
+      border: 1px solid rgba(255, 59, 92, 0.2);
+      color: var(--red)
+    }
+
+    .step {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 7px;
+      font-size: 11px;
+      line-height: 1.5
+    }
+
+    .stepn {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--acc);
+      color: #000;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+      margin-top: 1px
+    }
+
+    .mtabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--bdr);
+      padding-bottom: 8px;
+      flex-wrap: wrap
+    }
+
+    .mtab {
+      padding: 4px 11px;
+      border: 1px solid var(--bdr);
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--dim);
+      transition: all .2s
+    }
+
+    .mtab.on {
+      border-color: var(--acc);
+      color: var(--acc);
+      background: rgba(0, 198, 255, 0.08)
+    }
+
+    .mbpane {
+      display: none
+    }
+
+    .mbpane.on {
+      display: block
+    }
+
+    .izone {
+      border: 2px dashed var(--bdr);
+      border-radius: 5px;
+      padding: 22px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .3s;
+      position: relative
+    }
+
+    .izone:hover,
+    .izone.drag {
+      border-color: var(--acc);
+      background: rgba(0, 198, 255, 0.04)
+    }
+
+    .izone input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%
+    }
+
+    .prevbox {
+      margin-top: 10px;
+      background: var(--bg3);
+      border-radius: 3px;
+      padding: 8px;
+      max-height: 160px;
+      overflow-y: auto
+    }
+
+    .prow {
+      display: grid;
+      grid-template-columns: 65px 1fr 55px 70px;
+      gap: 4px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.3);
+      font-size: 10px;
+      font-family: 'Share Tech Mono', monospace
+    }
+
+    .phdr {
+      color: var(--dim);
+      font-size: 9px;
+      letter-spacing: 1px
+    }
+
+    .mant {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px
+    }
+
+    .mant th {
+      text-align: left;
+      padding: 4px 6px;
+      color: var(--dim);
+      font-size: 9px;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--bdr)
+    }
+
+    .mant td {
+      padding: 4px 6px;
+      border-bottom: 1px solid rgba(13, 58, 92, 0.3)
+    }
+
+    .mant input {
+      background: transparent;
+      border: none;
+      color: var(--txt);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      padding: 0;
+      width: 100%
+    }
+
+    .addrbtn {
+      width: 100%;
+      background: none;
+      border: 1px dashed var(--bdr);
+      color: var(--dim);
+      padding: 5px;
+      cursor: pointer;
+      font-size: 10px;
+      border-radius: 2px;
+      transition: all .2s;
+      margin-top: 4px
+    }
+
+    .addrbtn:hover {
+      border-color: var(--acc);
+      color: var(--acc)
+    }
+
+    .ssarea {
+      border: 2px dashed var(--bdr);
+      border-radius: 5px;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      transition: all .3s;
+      cursor: pointer
+    }
+
+    .ssarea:hover {
+      border-color: var(--acc)
+    }
+
+    .ssarea input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%
+    }
+
+    #ssPrev {
+      max-width: 100%;
+      max-height: 160px;
+      border-radius: 3px;
+      margin-top: 8px;
+      display: none
+    }
+
+    .wlinput {
+      display: flex;
+      gap: 4px;
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--bdr);
+      background: var(--bg2);
+      flex-shrink: 0
+    }
+
+    /* API KEY SETUP STYLES */
+    .api-source {
+      border: 1px solid var(--bdr);
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 10px;
+      transition: border-color .2s
+    }
+
+    .api-source.active {
+      border-color: var(--grn);
+      background: rgba(0, 230, 118, 0.03)
+    }
+
+    .api-source.backup {
+      border-color: rgba(255, 204, 0, 0.3)
+    }
+
+    .api-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 9px;
+      font-weight: 900;
+      font-family: 'Orbitron', monospace;
+      letter-spacing: 1px;
+      margin-bottom: 6px
+    }
+
+    .badge-best {
+      background: var(--grn);
+      color: #000
+    }
+
+    .badge-backup {
+      background: var(--warn);
+      color: #000
+    }
+
+    .badge-free {
+      background: rgba(0, 198, 255, 0.2);
+      color: var(--acc);
+      border: 1px solid rgba(0, 198, 255, 0.3)
+    }
+
+    .key-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 7px
+    }
+
+    .key-status {
+      font-size: 10px;
+      font-family: 'Share Tech Mono', monospace;
+      margin-top: 4px;
+      padding: 3px 8px;
+      border-radius: 2px;
+      background: var(--bg3)
+    }
+
+    /* LOADING SHIMMER */
+    .shim {
+      background: linear-gradient(90deg, var(--bg3) 25%, var(--bg2) 50%, var(--bg3) 75%);
+      background-size: 200% 100%;
+      animation: shim 1.5s infinite;
+      border-radius: 3px;
+      height: 50px;
+      margin: 6px 10px
+    }
+
+    @keyframes shim {
+      0% {
+        background-position: 200% 0
+      }
+
+      100% {
+        background-position: -200% 0
+      }
+    }
+
+    .ac-p10 {
+      text-align: center;
+      padding: 10px 0
+    }
+
+    .mb10 {
+      margin-bottom: 10px
+    }
+
+    .mb4 {
+      margin-bottom: 4px
+    }
+
+    .mb6 {
+      margin-bottom: 6px
+    }
+
+    .mt4 {
+      margin-top: 4px
+    }
+
+    .mt8 {
+      margin-top: 8px
+    }
+
+    .mt10 {
+      margin-top: 10px
+    }
+
+    .mt12 {
+      margin-top: 12px
+    }
+
+    .mt2 {
+      margin-top: 2px
+    }
+
+    .api-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--txt);
+      margin-bottom: 4px
+    }
+
+    .api-desc {
+      font-size: 11px;
+      color: var(--dim);
+      margin-bottom: 6px
+    }
+
+    .f10 {
+      font-size: 10px
+    }
+
+    .f11 {
+      font-size: 11px
+    }
+
+    .f12 {
+      font-size: 12px
+    }
+
+    .f9 {
+      font-size: 9px
+    }
+
+    .bold {
+      font-weight: 700
+    }
+
+    /* MOBILE RESPONSIVE LAYOUT */
+    @media (max-width: 900px) {
+      body {
+        height: auto;
+        overflow-y: auto;
+      }
+      .layout {
+        display: flex;
+        flex-direction: column;
+        overflow-y: visible;
+      }
+      header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+      }
+      .hright {
+        justify-content: center;
+      }
+      .panel, .ctr, .rp {
+        border-left: none;
+        border-right: none;
+        border-bottom: 2px solid var(--acc);
+        max-height: 500px;
+        flex-shrink: 0;
+      }
+      .mbg .modal {
+        width: 95vw !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══ FIRST-RUN SETUP MODAL ═══ -->
+  <div class="mbg hide" id="setupModal">
+    <div class="modal" style="width:500px">
+      <div class="mhd">
+        <span class="mtitle">⚙️ WELCOME — SETUP</span>
+        <button class="mclose" onclick="closeM('setupModal')">×</button>
+      </div>
+      <div class="mbody">
+        <div class="ibox grn">🟢 Enter your Finnhub key for real-time live prices. Free signup at finnhub.io — no credit
+          card.</div>
+        <div class="api-source active" id="fhBox">
+          <div><span class="api-badge badge-best">★ BEST</span> <span class="api-badge badge-free">FREE</span> <span
+              class="api-badge badge-free">REAL-TIME</span></div>
+          <div class="api-title">Finnhub <a href="https://finnhub.io" target="_blank" rel="noopener"
+              style="color:var(--acc);font-size:10px;font-weight:600;margin-left:8px">→ finnhub.io</a></div>
+          <div class="step">
+            <div class="stepn">1</div>
+            <div>Go to <b style="color:var(--acc)">finnhub.io</b> → sign up free</div>
+          </div>
+          <div class="step">
+            <div class="stepn">2</div>
+            <div>Copy your API key and paste below</div>
+          </div>
+          <div class="key-row">
+            <input id="setupFhIn" placeholder="Finnhub API key..."
+              style="flex:1;font-family:Share Tech Mono,monospace;font-size:11px">
+            <button class="btn bg" style="font-size:9px;padding:5px 12px" onclick="saveSetupKey()">CONNECT</button>
+          </div>
+          <div class="key-status" id="setupFhSt">Status: <span style="color:var(--dim)">Not configured</span></div>
+        </div>
+        <div id="setupKeysSaved" style="display:none" class="ibox grn">✅ Key saved! Click LAUNCH to start.</div>
+      </div>
+      <div class="mfoot">
+        <button class="btn bgh" style="font-size:9px;padding:5px 10px" onclick="skipSetup()">SKIP — USE DEMO
+          DATA</button>
+        <button class="btn bg" style="font-size:9px;padding:5px 10px" onclick="launchWithKeys()">🚀 LAUNCH WITH LIVE
+          DATA</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SETTINGS MODAL ═══ -->
+  <div class="mbg hide" id="settingsModal">
+    <div class="modal" style="width:540px">
+      <div class="mhd"><span class="mtitle">⚙ SETTINGS</span><button class="mclose"
+          onclick="closeM('settingsModal')">×</button></div>
+      <div class="mbody">
+        <div class="mtabs">
+          <div class="mtab on" onclick="switchSettings(this,'set-keys')">🔑 API Keys</div>
+          <div class="mtab" onclick="switchSettings(this,'set-data')">🗂 Data</div>
+          <div class="mtab" onclick="switchSettings(this,'set-about')">ℹ️ About</div>
+        </div>
+        <div class="mbpane on" id="set-keys">
+          <div class="api-source active mb10">
+            <div><span class="api-badge badge-best">★ BEST</span> <span class="api-badge badge-free">REAL-TIME</span>
+            </div>
+            <div class="api-title">Finnhub <a href="https://finnhub.io" target="_blank" rel="noopener"
+                style="color:var(--acc);font-size:10px;font-weight:600;margin-left:8px">→ get free key</a></div>
+            <div class="key-row"><input id="fhIn" placeholder="Finnhub API key..."
+                style="flex:1;font-family:Share Tech Mono,monospace;font-size:11px"><button class="btn bg"
+                style="font-size:9px;padding:5px 12px" onclick="saveKey('finnhub')">SAVE & TEST</button></div>
+            <div class="key-status" id="fhSt">Status: <span style="color:var(--dim)">Not configured</span></div>
+          </div>
+
+          <div class="api-source" style="border-color:var(--acc2);margin-bottom:10px">
+            <div><span class="api-badge badge-best">⚡ REAL-TIME</span> <span class="api-badge badge-free">FREE
+                Tier</span></div>
+            <div class="api-title">Alpaca Markets <a href="https://alpaca.markets/data" target="_blank" rel="noopener"
+                style="color:var(--acc);font-size:10px;font-weight:600;margin-left:8px">→ credentials</a></div>
+            <div class="api-desc">Used for sub-second momentum alerts.</div>
+            <div class="key-row"><input id="alKeyIn" placeholder="API Key ID"
+                style="flex:1;font-family:Share Tech Mono,monospace;font-size:11px"><input id="alSecIn" type="password"
+                placeholder="Secret Key" style="flex:1;font-family:Share Tech Mono,monospace;font-size:11px"></div>
+            <div class="key-row"><button class="btn bg bw" style="font-size:9px;" onclick="saveKey('alpaca')">SAVE
+                ALPACA CREDENTIALS</button></div>
+            <div class="key-status" id="alSt">Status: <span style="color:var(--dim)">Not configured</span></div>
+          </div>
+          <div class="api-source backup mb10">
+            <div><span class="api-badge badge-backup">BACKUP</span> <span class="api-badge badge-free">FREE
+                25/DAY</span></div>
+            <div class="api-title">Alpha Vantage <a href="https://alphavantage.co/support/#api-key" target="_blank"
+                rel="noopener" style="color:var(--acc);font-size:10px;font-weight:600;margin-left:8px">→ get free
+                key</a></div>
+            <div class="key-row"><input id="avIn" placeholder="Alpha Vantage API key..."
+                style="flex:1;font-family:Share Tech Mono,monospace;font-size:11px"><button class="btn by"
+                style="font-size:9px;padding:5px 12px" onclick="saveKey('alpha')">SAVE</button></div>
+            <div class="key-status" id="avSt">Status: <span style="color:var(--dim)">Not configured</span></div>
+          </div>
+          <div class="api-source" style="border-color:rgba(0,198,255,0.3)">
+            <div><span class="api-badge badge-free">🤖 AI</span> <span class="api-badge badge-free">OPTIONAL</span>
+            </div>
+            <div class="api-title">Anthropic (Claude AI) <a href="https://console.anthropic.com/" target="_blank"
+                rel="noopener" style="color:var(--acc);font-size:10px;font-weight:600;margin-left:8px">→ get key</a>
+            </div>
+            <div class="api-desc">Enables the AI Analysis tab. Without this, AI shows placeholder data.</div>
+            <div class="key-row"><input id="antIn" placeholder="sk-ant-..."
+                style="flex:1;font-family:Share Tech Mono,monospace;font-size:11px"><button class="btn"
+                style="font-size:9px;padding:5px 12px" onclick="saveKey('anthropic')">SAVE</button></div>
+            <div class="key-status" id="antSt">Status: <span style="color:var(--dim)">Not configured</span></div>
+          </div>
+        </div>
+        <div class="mbpane" id="set-data">
+          <div class="ibox blu">Manage your saved data. These actions cannot be undone.</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+            <button class="btn bg bw" onclick="loadMyPortfolio()">📈 Load My Portfolio</button>
+            <button class="btn br bw"
+              onclick="if(confirm('Clear all portfolio positions?')){S.port=[];save();renderPort();toast('Cleared','Portfolio cleared','warn');}">🗑
+              Clear Portfolio</button>
+            <button class="btn bo bw"
+              onclick="if(confirm('Reset watchlist?')){S.wl=MY_WATCHLIST.slice();save();renderWL();toast('Reset','Watchlist reset to your tickers','warn');}">↺
+              Reset Watchlist</button>
+            <button class="btn bgh bw"
+              onclick="if(confirm('Clear ALL data including API keys?')){localStorage.clear();location.reload();}">⚠
+              Reset Everything</button>
+          </div>
+        </div>
+        <div class="mbpane" id="set-about">
+          <div style="text-align:center;padding:10px 0">
+            <div
+              style="font-family:'Orbitron',monospace;font-size:18px;font-weight:900;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">
+              INTELLIS MARKET MATRIX AI</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--acc3);margin-top:4px">v5.0
+            </div>
+          </div>
+          <div class="ibox blu" style="margin-top:10px">
+            <div style="font-size:12px;font-weight:700;margin-bottom:4px">Data Sources</div>
+            <div style="font-size:11px;line-height:1.8">• <b>Finnhub</b> — Real-time quotes, WebSocket, news<br>•
+              <b>Alpha Vantage</b> — Backup data<br>• <b>Yahoo Finance</b> — Chart fallback<br>• <b>Anthropic Claude</b>
+              — AI analysis (optional)
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:12px;font-size:10px;color:var(--dim)">Single-file dashboard · All
+            data stored locally</div>
+        </div>
+      </div>
+      <div class="mfoot"><button class="btn bgh" style="font-size:9px;padding:5px 10px"
+          onclick="closeM('settingsModal')">CLOSE</button></div>
+    </div>
+  </div>
+
+  <!-- ═══ IMPORT MODAL ═══ -->
+  <div class="mbg hide" id="importModal">
+    <div class="modal">
+      <div class="mhd"><span class="mtitle">IMPORT PORTFOLIO</span><button class="mclose"
+          onclick="closeM('importModal')">×</button></div>
+      <div class="mbody">
+        <div class="mtabs">
+          <div class="mtab on" onclick="switchM(this,'im-rh')">📱 Robinhood</div>
+          <div class="mtab" onclick="switchM(this,'im-csv')">📄 CSV</div>
+          <div class="mtab" onclick="switchM(this,'im-ss')">📷 Screenshot AI</div>
+          <div class="mtab" onclick="switchM(this,'im-man')">✏️ Manual</div>
+        </div>
+        <div class="mbpane on" id="im-rh">
+          <div class="ibox blu">Robinhood doesn't allow direct API export. Fastest options:</div>
+          <div style="font-size:12px;font-weight:700;color:var(--txt);margin-bottom:8px">Option A — Screenshot (30
+            seconds)</div>
+          <div class="step">
+            <div class="stepn">1</div>
+            <div>Open Robinhood → portfolio screen showing all positions</div>
+          </div>
+          <div class="step">
+            <div class="stepn">2</div>
+            <div>Screenshot it (power + volume down)</div>
+          </div>
+          <div class="step">
+            <div class="stepn">3</div>
+            <div>Use the <b>📷 Screenshot AI</b> tab — AI reads all positions automatically</div>
+          </div>
+          <div class="ibox grn" style="margin-top:10px">💡 Or download your CSV: robinhood.com → Account → Statements →
+            use 📄 CSV tab</div>
+        </div>
+        <div class="mbpane" id="im-csv">
+          <div class="ibox blu">Auto-detects columns from Robinhood, Schwab, Fidelity, TD Ameritrade exports</div>
+          <div class="izone" id="csvZone">
+            <input type="file" id="csvFile" accept=".csv,.txt" onchange="doCSV(event)">
+            <div style="font-size:26px;margin-bottom:6px">📄</div>
+            <div style="font-size:13px;font-weight:700;color:var(--txt)">Drop CSV file here or click to browse</div>
+            <div style="font-size:11px;color:var(--dim);margin-top:3px">Robinhood, Schwab, Fidelity, TD, E*Trade</div>
+          </div>
+          <div id="csvPrev" style="display:none" class="prevbox">
+            <div class="prow phdr"><span>SYMBOL</span><span>NAME</span><span>SHARES</span><span>AVG COST</span></div>
+            <div id="csvRows"></div>
+          </div>
+        </div>
+        <div class="mbpane" id="im-ss">
+          <div class="ibox grn">🤖 AI reads your broker screenshot and extracts all positions automatically</div>
+          <div class="ssarea">
+            <input type="file" id="ssFile" accept="image/*" onchange="doSS(event)">
+            <div style="font-size:26px">📷</div>
+            <div style="font-size:13px;font-weight:700;color:var(--txt);margin-top:4px">Upload Portfolio Screenshot
+            </div>
+            <div style="font-size:11px;color:var(--dim)">Robinhood, Webull, E*Trade, Schwab, TD</div>
+            <img id="ssPrev">
+          </div>
+          <div id="ssStatus" style="margin-top:8px;font-size:11px;color:var(--dim);text-align:center"></div>
+          <div id="ssPrevBox" style="display:none" class="prevbox">
+            <div class="prow phdr"><span>SYMBOL</span><span>NAME</span><span>SHARES</span><span>AVG COST</span></div>
+            <div id="ssRows"></div>
+          </div>
+        </div>
+        <div class="mbpane" id="im-man">
+          <div class="ibox blu">Enter positions manually</div>
+          <table class="mant">
+            <thead>
+              <tr>
+                <th>SYMBOL</th>
+                <th>SHARES</th>
+                <th>AVG COST $</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="manRows">
+              <tr>
+                <td><input type="text" placeholder="AAPL" class="ms" style="text-transform:uppercase"></td>
+                <td><input type="number" placeholder="10" class="msh"></td>
+                <td><input type="number" placeholder="150.00" class="mc"></td>
+                <td><button onclick="this.closest('tr').remove()"
+                    style="background:none;border:none;color:var(--dim);cursor:pointer">✕</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="addrbtn" onclick="addManRow()">+ Add Row</button>
+        </div>
+      </div>
+      <div class="mfoot">
+        <button class="btn bgh" style="font-size:9px;padding:5px 10px" onclick="closeM('importModal')">CANCEL</button>
+        <button class="btn bg" style="font-size:9px;padding:5px 10px" onclick="doImport()">✓ IMPORT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ EXPORT MODAL ═══ -->
+  <div class="mbg hide" id="exportModal">
+    <div class="modal" style="width:340px">
+      <div class="mhd"><span class="mtitle">EXPORT PORTFOLIO</span><button class="mclose"
+          onclick="closeM('exportModal')">×</button></div>
+      <div class="mbody">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn bw" onclick="expCSV()">📄 Export as CSV (Excel)</button>
+          <button class="btn by bw" onclick="expJSON()">{ } Export as JSON</button>
+          <button class="btn bgh bw" onclick="expText()">📋 Copy to Clipboard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <div style="display:flex;align-items:baseline;gap:6px">
+      <div class="logo">INTELLIS MARKET MATRIX AI</div>
+      <span
+        style="font-size:10px;color:var(--acc3);font-family:'Share Tech Mono',monospace;letter-spacing:1px">v5.0</span>
+    </div>
+    <div class="hright">
+      <div class="mpill">
+        <div class="dot" id="mDot"></div><span id="mSt">LOADING</span>
+      </div>
+      <div id="clk">--:--:-- EST</div>
+      <button class="hbtn y" id="squawkBtn" onclick="toggleSquawk()">📻 SQUAWK: OFF</button>
+      <button class="hbtn key" onclick="openM('settingsModal')">⚙ SETTINGS</button>
+      <button class="hbtn" id="installBtn" style="display:none" onclick="installPWA()">📲 INSTALL</button>
+      <button class="hbtn o" onclick="openM('importModal')">⬆ IMPORT</button>
+      <button class="hbtn" onclick="openM('exportModal')">⬇ EXPORT</button>
+      <button class="hbtn" onclick="fullRefresh()" id="rfBtn">↻ REFRESH</button>
+    </div>
+  </header>
+
+  <!-- ═══ TICKER ═══ -->
+  <div class="ticker-bar">
+    <div class="ticker-inner" id="tickScroll">
+      <span class="tn">⚡ INTELLIS MARKET MATRIX AI v5 — LOADING LIVE DATA...</span>
+    </div>
+  </div>
+
+  <!-- ═══ LAYOUT ═══ -->
+  <div class="layout">
+
+    <!-- LEFT PANEL -->
+    <div class="panel">
+      <div class="tabs">
+        <div class="tab on" onclick="lt(this,'lt-port')">PORTFOLIO</div>
+        <div class="tab" onclick="lt(this,'lt-wl')">WATCHLIST</div>
+        <div class="tab" onclick="lt(this,'lt-al')">ALERTS</div>
+        <div class="tab" onclick="lt(this,'lt-earn')">EARNINGS</div>
+      </div>
+      <div class="tp on" id="lt-port">
+        <div class="sumbox">
+          <div class="sumlbl">TOTAL PORTFOLIO VALUE</div>
+          <div class="sumval" id="portTotal">$0.00</div>
+          <div id="portPnl" style="font-size:11px;margin-top:2px;font-family:'Share Tech Mono',monospace">Add stocks
+            below</div>
+        </div>
+        <div id="portList" style="flex:1;overflow-y:auto">
+          <div style="text-align:center;color:var(--dim);padding:20px;font-size:11px;line-height:1.7">No stocks
+            yet<br>Add below, IMPORT, or load DEMO</div>
+        </div>
+        <div class="fsec">
+          <div class="slbl">QUICK ADD</div>
+          <div class="frow">
+            <input id="addSym" placeholder="TICKER" style="width:68px;text-transform:uppercase">
+            <input id="addSh" type="number" placeholder="Shares" style="width:58px">
+            <input id="addCst" type="number" placeholder="Avg $">
+            <button class="btn bg" style="font-size:8px;padding:5px 8px" onclick="addSt()">+ADD</button>
+          </div>
+          <div class="frow">
+            <button class="btn bo bw" onclick="openM('importModal')">⬆ IMPORT</button>
+            <button class="btn" style="font-size:8px;padding:5px 8px" onclick="loadDemo()">DEMO</button>
+          </div>
+        </div>
+        <div class="acfg">
+          <div class="slbl">ALERT THRESHOLDS</div>
+          <div class="cfgrow"><span class="cfglbl">Price Move</span>
+            <input id="aDown" type="number" value="3" style="width:38px;text-align:center"
+              aria-label="Alert Down Percent">%▼
+            <input id="aUp" type="number" value="3" style="width:38px;text-align:center"
+              aria-label="Alert Up Percent">%▲
+          </div>
+          <div class="cfgrow"><span class="cfglbl">Vol Spike</span>
+            <input id="aVol" type="number" value="200" style="width:48px;text-align:center"
+              aria-label="Volume Spike Threshold">
+            <span style="font-size:10px;color:var(--dim)">% of avg</span>
+          </div>
+          <button class="btn bw" style="font-size:8px;padding:5px" onclick="saveAl()">SAVE ALERT CONFIG</button>
+        </div>
+      </div>
+      <div class="tp" id="lt-wl">
+        <div class="wlinput">
+          <input id="wlIn" placeholder="Add symbol..." style="text-transform:uppercase">
+          <button class="btn" style="font-size:8px;padding:5px 8px" onclick="addWL()">+ADD</button>
+        </div>
+        <div id="wlList" style="flex:1;overflow-y:auto"></div>
+      </div>
+      <div class="tp" id="lt-al">
+        <div
+          style="padding:7px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bdr);flex-shrink:0">
+          <span style="font-size:10px;color:var(--dim)">Live alert feed</span>
+          <button class="btn bgh" style="font-size:8px;padding:3px 7px" onclick="clearAl()">CLEAR</button>
+        </div>
+        <div id="alList" style="flex:1;overflow-y:auto">
+          <div style="text-align:center;color:var(--dim);padding:20px;font-size:11px">No alerts yet</div>
+        </div>
+      </div>
+      <div class="tp" id="lt-earn">
+        <div style="padding:7px 10px;border-bottom:1px solid var(--bdr);flex-shrink:0;font-size:10px;color:var(--dim)">
+          Upcoming earnings this week</div>
+        <div id="earnList" style="flex:1;overflow-y:auto"></div>
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div class="ctr">
+      <div class="chartbox">
+        <canvas id="priceChart"></canvas>
+        <div class="cov">
+          <div class="csym" id="cSym">SELECT A STOCK</div>
+          <div class="cprice" id="cPrice">—</div>
+          <div class="cchg" id="cChg"></div>
+        </div>
+        <div class="pbts">
+          <button class="pbt on" onclick="setPer(this,'1D')">1D</button>
+          <button class="pbt" onclick="setPer(this,'1W')">1W</button>
+          <button class="pbt" onclick="setPer(this,'1M')">1M</button>
+          <button class="pbt" onclick="setPer(this,'3M')">3M</button>
+          <button class="pbt" onclick="setPer(this,'1Y')">1Y</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+        <div class="tabs">
+          <div class="tab on" onclick="ct(this,'ct-mv')">🔥 MOVERS</div>
+          <div class="tab" onclick="ct(this,'ct-opt')">📊 OPTIONS</div>
+          <div class="tab" onclick="ct(this,'ct-sq')">💥 SQUEEZE</div>
+          <div class="tab" onclick="ct(this,'ct-sc')">🔍 SCREENER</div>
+          <div class="tab" onclick="ct(this,'ct-ai')">🤖 AI</div>
+        </div>
+        <div class="tp on" id="ct-mv">
+          <div
+            style="padding:5px 10px;background:var(--bg2);border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
+            <span style="font-size:10px;color:var(--dim)">Top movers — live prices from Finnhub</span>
+            <button class="btn bgh" style="font-size:8px;padding:3px 7px" onclick="loadMovers()">↻</button>
+          </div>
+          <div id="mvList" style="flex:1;overflow-y:auto">
+            <div class="shim"></div>
+            <div class="shim"></div>
+            <div class="shim"></div>
+          </div>
+        </div>
+        <div class="tp" id="ct-opt">
+          <div
+            style="padding:5px 10px;background:var(--bg2);border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
+            <span style="font-size:10px;color:var(--dim)">Unusual options flow</span>
+            <button class="btn bgh" style="font-size:8px;padding:3px 7px" onclick="loadOpts()">↻</button>
+          </div>
+          <div class="orow ohd">
+            <span>TICKER</span><span>TYPE</span><span>STRIKE</span><span>VOL</span><span>PREM</span><span>SIGNAL</span>
+          </div>
+          <div id="optList" style="flex:1;overflow-y:auto"></div>
+        </div>
+        <div class="tp" id="ct-sq">
+          <div
+            style="padding:5px 10px;background:var(--bg2);border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
+            <span style="font-size:10px;color:var(--dim)">Short squeeze candidates</span>
+            <button class="btn bgh" style="font-size:8px;padding:3px 7px" onclick="loadSqueeze()">↻</button>
+          </div>
+          <div id="sqList" style="flex:1;overflow-y:auto"></div>
+        </div>
+        <div class="tp" id="ct-sc">
+          <div
+            style="padding:5px 10px;background:var(--bg2);border-bottom:1px solid var(--bdr);display:flex;gap:5px;flex-shrink:0;align-items:center">
+            <select id="scFilt" style="flex:1">
+              <option value="topg">Top Gainers</option>
+              <option value="topl">Top Losers</option>
+              <option value="hvol">High Volume</option>
+              <option value="52h">52-Week Highs</option>
+              <option value="52l">52-Week Lows</option>
+              <option value="brk">Breakout Candidates</option>
+            </select>
+            <button class="btn" style="font-size:8px;padding:5px 8px" onclick="runScr()">RUN</button>
+          </div>
+          <div class="scrow schd">
+            <span>TICKER</span><span>NAME</span><span>PRICE</span><span>CHG%</span><span>VOL</span>
+          </div>
+          <div id="scList" style="flex:1;overflow-y:auto"></div>
+        </div>
+        <div class="tp" id="ct-ai" style="flex-direction:column">
+          <div class="aitb">
+            <input id="aiTk" placeholder="Ticker" style="width:80px;text-transform:uppercase">
+            <select id="aiTf" style="width:95px">
+              <option>Intraday</option>
+              <option>Swing (Days)</option>
+              <option>Position</option>
+            </select>
+            <button class="btn" style="font-size:8px;padding:5px 8px" onclick="runAI()">ANALYZE</button>
+            <input id="qAsk" placeholder="Ask anything about any stock..." style="flex:1;min-width:80px">
+            <button class="btn by" style="font-size:8px;padding:5px 8px" onclick="quickQ()">ASK</button>
+          </div>
+          <div class="aiout" id="aiOut"><span style="color:var(--dim)">◈ Enter a ticker → ANALYZE for AI analysis
+              Or type any question in the Ask box
+
+              ⚙ Requires Anthropic key in SETTINGS for live AI</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="rp">
+      <div class="fgbox">
+        <div class="fglbl">FEAR & GREED INDEX</div>
+        <div class="fgval" id="fgV">—</div>
+        <div class="fgtxt" id="fgT">LOADING</div>
+        <div class="fgtrack">
+          <div class="fgneedle" id="fgN" style="left:50%"></div>
+        </div>
+        <div class="fgends"><span>FEAR</span><span>GREED</span></div>
+      </div>
+      <div class="tabs">
+        <div class="tab on" onclick="rt(this,'rt-idx')">INDICES</div>
+        <div class="tab" onclick="rt(this,'rt-mac')">MACRO</div>
+        <div class="tab" onclick="rt(this,'rt-sec')">SECTORS</div>
+        <div class="tab" onclick="rt(this,'rt-nws')">NEWS</div>
+      </div>
+      <div class="tp on" id="rt-idx">
+        <div id="idxList" style="flex:1;overflow-y:auto">
+          <div class="shim"></div>
+          <div class="shim"></div>
+        </div>
+      </div>
+      <div class="tp" id="rt-mac">
+        <div id="macList" style="flex:1;overflow-y:auto"></div>
+      </div>
+      <div class="tp" id="rt-sec">
+        <div id="secList" style="flex:1;overflow-y:auto"></div>
+      </div>
+      <div class="tp" id="rt-nws">
+        <div id="nwsList" style="flex:1;overflow-y:auto">
+          <div class="shim"></div>
+          <div class="shim"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sbar">
+    <span id="lastUpd">Waiting for API key...</span>
+    <span>INTELLIS MARKET MATRIX AI v5.0 — Powered by Finnhub</span>
+    <span id="connSt" style="display:flex;align-items:center;gap:5px">
+      <div class="dot warn" style="width:6px;height:6px"></div>SETTING UP
+    </span>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script>
+    'use strict';
+
+    // ══════════════════════════════════════════════════════
+    //  INTELLIS MARKET MATRIX AI v5  —  Finnhub-first live data engine
+    // ══════════════════════════════════════════════════════
+
+    const CFG = {
+      finnhubKey: localStorage.getItem('fh_key') || '',
+      alphaKey: localStorage.getItem('av_key') || '',
+      anthropicKey: localStorage.getItem('ant_key') || '',
+      alpacaKey: localStorage.getItem('al_key') || '',
+      alpacaSecret: localStorage.getItem('al_sec') || '',
+      useDemo: localStorage.getItem('useDemo') === '1',
+    };
+
+    // Brandon's real portfolio — pre-loaded from Robinhood screenshots 2/27/2026
+    const MY_PORTFOLIO = [
+      // Roth IRA — Stocks
+      { sym: 'PAPL', sh: 2000, cost: 0 },
+      { sym: 'STUB', sh: 6, cost: 0 },
+      // Investing — Stocks
+      { sym: 'SOFI', sh: 300, cost: 0 },
+      { sym: 'BLNE', sh: 250, cost: 0 },
+      { sym: 'BABA', sh: 10, cost: 0 },
+      { sym: 'GPUSB', sh: 13.69, cost: 0 },
+    ];
+    // Option underlying tickers to watch (not positions, just price monitoring)
+    const MY_WATCHLIST = ['SOFI', 'UBER', 'HIMS', 'LAC', 'PLUG', 'SPY', 'QQQ', 'NVDA', 'TSLA', 'AAPL'];
+
+    const S = {
+      port: [], wl: MY_WATCHLIST,
+      alCfg: { up: 3, dn: 3, vol: 200 }, alCool: {},
+      prices: {}, prevPrices: {},
+      selSym: 'SOFI', period: '1D', chart: null,
+      impData: [], ws: null, wsSubs: new Set(), cache: {}, alpacaWS: null, squawkOn: false,
+    };
+
+    // Load my real portfolio if no saved data exists yet
+    function loadMyPortfolio() {
+      if (!confirm('Replace current portfolio with your Robinhood stock positions?')) return;
+      S.port = MY_PORTFOLIO.map(p => ({ ...p }));
+      save(); renderPort();
+      toast('My Portfolio Loaded', 'PAPL · STUB · SOFI · BLNE · BABA · GPUSB', 'up');
+    }
+
+    // ── CLOCK ──────────────────────────────────────────────
+    function tick() {
+      const e = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      const h = e.getHours(), m = e.getMinutes(), s = e.getSeconds(), d = e.getDay(), mins = h * 60 + m;
+      document.getElementById('clk').textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} EST`;
+      const dot = document.getElementById('mDot'), st = document.getElementById('mSt');
+      if (d >= 1 && d <= 5 && mins >= 570 && mins < 960) { dot.className = 'dot'; st.textContent = 'MARKET OPEN'; st.style.color = 'var(--grn)' }
+      else if (d >= 1 && d <= 5 && ((mins >= 240 && mins < 570) || (mins >= 960 && mins < 1200))) { dot.className = 'dot warn'; st.textContent = mins < 570 ? 'PRE-MARKET' : 'AFTER-HOURS'; st.style.color = 'var(--warn)' }
+      else { dot.className = 'dot off'; st.textContent = 'CLOSED'; st.style.color = 'var(--dim)' }
+    }
+    setInterval(tick, 1000); tick();
+
+
+    // ── MOMENTUM SCANNER (ALPACA) ───────────────────────
+    function connectAlpaca() {
+      if (!CFG.alpacaKey || !CFG.alpacaSecret) return;
+      if (S.alpacaWS && S.alpacaWS.readyState === WebSocket.OPEN) return;
+      setConn('MATRIX SCANNING', 'var(--acc2)');
+      S.alpacaWS = new WebSocket('wss://stream.data.alpaca.markets/v2/iex');
+      S.alpacaWS.onopen = () => {
+        S.alpacaWS.send(JSON.stringify({ action: 'auth', key: CFG.alpacaKey, secret: CFG.alpacaSecret }));
+      };
+      S.alpacaWS.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        data.forEach(m => {
+          if (m.msg === 'authenticated') { S.alpacaWS.send(JSON.stringify({ action: 'subscribe', trades: ['*'] })); }
+          if (m.T === 't') { // Trade message
+            const sym = m.S, p = m.p;
+            S.prices[sym] = p;
+            if (S.prevPrices[sym]) {
+              const pct = ((p - S.prevPrices[sym]) / S.prevPrices[sym]) * 100;
+              if (Math.abs(pct) >= 2.0) { triggerMomentum(sym, p, pct); }
+            }
+            S.prevPrices[sym] = p;
+          }
+        });
+      };
+    }
+    function triggerMomentum(sym, p, pct) {
+      const key = 'mom_' + sym; if (S.alCool[key] && Date.now() - S.alCool[key] < 30000) return;
+      S.alCool[key] = Date.now();
+      const dir = pct > 0 ? '🔥 SPIKE' : '💩 DROP';
+      toast(`${dir}: ${sym}`, `Matrix detects ${pct.toFixed(2)}% move to ${p.toFixed(2)}`, pct > 0 ? 'up' : 'dn');
+      loadTickerNews(sym);
+    }
+    function toggleSquawk() {
+      S.squawkOn = !S.squawkOn;
+      const btn = document.getElementById('squawkBtn');
+      if (S.squawkOn) {
+        btn.innerHTML = '📻 SQUAWK: LIVE'; btn.classList.add('bg');
+        toast('Squawk Enabled', 'Live audio stream active — click play if needed', 'ai');
+        if (!document.getElementById('squawkWrap')) {
+          // Outer widget wrapper
+          const wrap = document.createElement('div'); wrap.id = 'squawkWrap';
+          wrap.style.cssText = [
+            'position:fixed;bottom:16px;right:16px;z-index:9999;',
+            'background:#020b14;border:1px solid #00f2ff;border-radius:6px;',
+            'box-shadow:0 0 18px rgba(0,242,255,0.3);display:flex;',
+            'flex-direction:column;width:300px;'
+          ].join('');
+
+          // Title bar
+          const bar = document.createElement('div');
+          bar.style.cssText = [
+            'display:flex;align-items:center;justify-content:space-between;',
+            'padding:5px 10px;background:rgba(0,242,255,0.07);',
+            'border-bottom:1px solid #0d3a5c;font-family:Orbitron,monospace;',
+            'font-size:10px;color:#00f2ff;letter-spacing:1px;flex-shrink:0;'
+          ].join('');
+          bar.innerHTML = '<span>📻 SQUAWK BOX — LIVE</span>' +
+            '<button onclick="toggleSquawk()" style="background:none;border:none;' +
+            'color:#ff3b5c;cursor:pointer;font-size:13px;padding:0 4px;line-height:1;">✕</button>';
+
+          // Video crop container — only 32px tall, hides most of the iframe
+          const crop = document.createElement('div');
+          crop.style.cssText = [
+            'width:300px;height:32px;overflow:hidden;position:relative;',
+            'background:#000;flex-shrink:0;'
+          ].join('');
+
+          // YouTube iframe — tall but mostly hidden via crop container
+          const f = document.createElement('iframe'); f.id = 'squawkFrame';
+          f.src = 'https://www.youtube.com/embed/Ryo3xVZd_sI' +
+            '?autoplay=1&controls=0&mute=0&rel=0&modestbranding=1' +
+            '&fs=0&iv_load_policy=3&disablekb=1&playsinline=1';
+          f.allow = 'autoplay; encrypted-media';
+          f.allowFullscreen = false;
+          f.style.cssText = [
+            'width:300px;height:300px;border:none;display:block;',
+            'margin-top:-134px;pointer-events:none;'
+          ].join('');
+
+          // Click-to-unmute overlay (YouTube requires user gesture for audio)
+          const overlay = document.createElement('div'); overlay.id = 'squawkOverlay';
+          overlay.style.cssText = [
+            'position:absolute;inset:0;display:flex;align-items:center;',
+            'justify-content:center;background:rgba(0,5,10,0.75);',
+            'cursor:pointer;font-family:Orbitron,monospace;font-size:9px;',
+            'color:#00f2ff;letter-spacing:1px;gap:5px;'
+          ].join('');
+          overlay.innerHTML = '▶ TAP TO ENABLE AUDIO';
+          overlay.onclick = () => {
+            // Reload iframe without mute to trigger audio after user gesture
+            f.src = f.src; overlay.remove();
+          };
+
+          crop.appendChild(f);
+          crop.appendChild(overlay);
+          wrap.appendChild(bar);
+          wrap.appendChild(crop);
+          document.body.appendChild(wrap);
+        }
+      } else {
+        btn.innerHTML = '📻 SQUAWK: OFF'; btn.classList.remove('bg');
+        const wrap = document.getElementById('squawkWrap'); if (wrap) wrap.remove();
+        toast('Squawk Muted', 'Audio feed disconnected', 'warn');
+      }
+    }
+    async function loadTickerNews(sym) {
+      if (!CFG.finnhubKey) return;
+      try {
+        const res = await fetch(`https://finnhub.io/api/v1/company-news?symbol=${sym}&from=${new Date(Date.now() - 86400000).toISOString().split('T')[0]}&to=${new Date().toISOString().split('T')[0]}&token=${CFG.finnhubKey}`);
+        const news = await res.json();
+        if (news && news.length > 0) {
+          const latest = news[0];
+          toast(`CATALYST: ${sym}`, latest.headline.substring(0, 60) + '...', 'ai');
+          renderNews([latest, ...S.cache.news || []]);
+        }
+      } catch (e) { }
+    }
+
+    // ── STATUS HELPERS ──────────────────────────────────────
+    function setConn(text, col = 'var(--grn)') {
+      const el = document.getElementById('connSt');
+      if (el) el.innerHTML = `<div class="dot" style="width:6px;height:6px;background:${col};box-shadow:0 0 5px ${col}"></div>${text}`;
+    }
+    function setUpd(t) { const el = document.getElementById('lastUpd'); if (el) el.textContent = t; }
+
+    // ══════════════════════════════════════════════════════
+    //  FINNHUB REST API
+    //  Docs: https://finnhub.io/docs/api
+    //  Free: 60 calls/min, real-time US quotes
+    // ══════════════════════════════════════════════════════
+    const FH_CACHE = {};  // sym -> {data, ts}
+    const FH_TTL = 15000; // 15s cache
+
+    async function fhQuote(sym) {
+      // Return cache if fresh
+      if (FH_CACHE[sym] && Date.now() - FH_CACHE[sym].ts < FH_TTL) return FH_CACHE[sym].data;
+      if (!CFG.finnhubKey) return null;
+
+      try {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 6000);
+        const r = await fetch(
+          `https://finnhub.io/api/v1/quote?symbol=${sym}&token=${CFG.finnhubKey}`,
+          { signal: ctrl.signal }
+        );
+        if (!r.ok) { if (r.status === 401 || r.status === 403) CFG.finnhubKey = ''; return null; }
+        const d = await r.json();
+        if (!d.c || d.c === 0) return null;
+
+        // Normalize to our standard format
+        const q = {
+          symbol: sym,
+          shortName: sym,               // Finnhub quote doesn't return name; we add it below
+          regularMarketPrice: d.c,      // current price
+          regularMarketChange: +((d.d ?? 0).toFixed(3)),      // change
+          regularMarketChangePercent: +((d.dp ?? 0).toFixed(3)), // change %
+          regularMarketDayHigh: d.h,
+          regularMarketDayLow: d.l,
+          regularMarketOpen: d.o,
+          prevClose: d.pc,
+          regularMarketVolume: 0,      // not in /quote endpoint
+          averageVolume: 0,
+          fiftyTwoWeekHigh: 0,
+          fiftyTwoWeekLow: 0,
+          _src: 'finnhub', _ts: Date.now()
+        };
+        FH_CACHE[sym] = { data: q, ts: Date.now() };
+        return q;
+      } catch (e) { return null; }
+    }
+
+    // Batch fetch via Finnhub (parallel, respecting ~60 req/min free tier)
+    async function fhBatch(syms) {
+      const results = {};
+      const clean = syms.filter(s => !s.startsWith('^') && !s.includes('=F'));
+      // Smaller chunks + longer delay to avoid 429 on free tier (60 req/min)
+      for (let i = 0; i < clean.length; i += 5) {
+        const chunk = clean.slice(i, i + 5);
+        const res = await Promise.all(chunk.map(s => fhQuote(s)));
+        chunk.forEach((s, idx) => { if (res[idx]) results[s] = res[idx]; });
+        if (i + 5 < clean.length) await sleep(800);
+      }
+      return results;
+    }
+
+    // Finnhub company profile (for name + market cap)
+    const PROFILE_CACHE = {};
+    async function fhProfile(sym) {
+      if (PROFILE_CACHE[sym]) return PROFILE_CACHE[sym];
+      if (!CFG.finnhubKey) return null;
+      try {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 5000);
+        const r = await fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${sym}&token=${CFG.finnhubKey}`, { signal: ctrl.signal });
+        if (!r.ok) return null;
+        const d = await r.json();
+        PROFILE_CACHE[sym] = d;
+        return d;
+      } catch { return null; }
+    }
+
+    // Finnhub candles for chart
+    async function fhCandles(sym, from, to, res = 'D') {
+      if (!CFG.finnhubKey) return null;
+      try {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 6000);
+        const r = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${sym}&resolution=${res}&from=${from}&to=${to}&token=${CFG.finnhubKey}`, { signal: ctrl.signal });
+        if (!r.ok) return null;
+        const d = await r.json();
+        if (d.s !== 'ok' || !d.t) return null;
+        return d.t.map((t, i) => ({ x: t * 1000, y: d.c[i] }));
+      } catch { return null; }
+    }
+
+    // Finnhub WebSocket — real-time tick streaming
+    function connectWS() {
+      if (!CFG.finnhubKey) return;
+      if (S.ws && S.ws.readyState === WebSocket.OPEN) return;
+      try {
+        S.ws = new WebSocket(`wss://ws.finnhub.io?token=${CFG.finnhubKey}`);
+        S.ws.onopen = () => {
+          setConn('WS LIVE', 'var(--grn)');
+          setUpd('WebSocket connected — real-time price stream active');
+          S.wsSubs.forEach(sym => wsSub(sym));
+        };
+        S.ws.onmessage = (e) => {
+          try {
+            const msg = JSON.parse(e.data);
+            if (msg.type === 'trade' && msg.data) {
+              msg.data.forEach(tr => {
+                const sym = tr.s, price = tr.p;
+                if (!sym || !price) return;
+                if (FH_CACHE[sym]?.data) {
+                  const prev = FH_CACHE[sym].data.regularMarketPrice;
+                  FH_CACHE[sym].data.regularMarketPrice = price;
+                  FH_CACHE[sym].data.regularMarketChange = +(price - (FH_CACHE[sym].data.prevClose || prev)).toFixed(3);
+                  FH_CACHE[sym].data.regularMarketChangePercent = FH_CACHE[sym].data.prevClose ? +((price - FH_CACHE[sym].data.prevClose) / FH_CACHE[sym].data.prevClose * 100).toFixed(3) : 0;
+                  FH_CACHE[sym].ts = Date.now();
+                }
+                S.prices[sym] = price;
+              });
+              debouncedUIRefresh();
+            }
+          } catch { }
+        };
+        S.ws.onerror = () => { setConn('WS ERROR', 'var(--red)'); };
+        S.ws.onclose = () => { setConn('RECONNECTING...', 'var(--warn)'); setTimeout(connectWS, 8000); };
+      } catch (e) { console.warn('WS failed:', e); }
+    }
+
+    function wsSub(sym) {
+      if (!S.ws || S.ws.readyState !== WebSocket.OPEN || S.wsSubs.has(sym)) return;
+      S.wsSubs.add(sym);
+      try { S.ws.send(JSON.stringify({ type: 'subscribe', symbol: sym })); } catch { }
+    }
+
+    let _uiTimer = null;
+    function debouncedUIRefresh() { if (_uiTimer) return; _uiTimer = setTimeout(() => { _uiTimer = null; try { renderPort(true); renderWL(true); } catch (e) { console.warn('UI refresh error:', e); } setUpd('Live: ' + new Date().toLocaleTimeString()); }, 400); }
+
+    // ══════════════════════════════════════════════════════
+    //  ALPHA VANTAGE — backup for missing symbols
+    // ══════════════════════════════════════════════════════
+    async function avQuote(sym) {
+      if (!CFG.alphaKey || sym.startsWith('^')) return null;
+      if (FH_CACHE[sym] && Date.now() - FH_CACHE[sym].ts < 60000) return FH_CACHE[sym].data;
+      try {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 8000);
+        const r = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${sym}&apikey=${CFG.alphaKey}`, { signal: ctrl.signal });
+        if (!r.ok) return null;
+        const d = await r.json();
+        const gq = d['Global Quote'];
+        if (!gq || !gq['05. price']) return null;
+        const price = parseFloat(gq['05. price']);
+        if (!price) return null;
+        const q = {
+          symbol: sym, shortName: sym,
+          regularMarketPrice: price,
+          regularMarketChange: parseFloat(gq['09. change']) || 0,
+          regularMarketChangePercent: parseFloat(gq['10. change percent']) || 0,
+          regularMarketDayHigh: parseFloat(gq['03. high']) || price,
+          regularMarketDayLow: parseFloat(gq['04. low']) || price,
+          regularMarketVolume: parseFloat(gq['06. volume']) || 0,
+          averageVolume: 0, fiftyTwoWeekHigh: 0, fiftyTwoWeekLow: 0,
+          _src: 'alphavantage', _ts: Date.now()
+        };
+        FH_CACHE[sym] = { data: q, ts: Date.now() };
+        return q;
+      } catch { return null; }
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  MAIN DATA FETCHER — tries sources in order
+    // ══════════════════════════════════════════════════════
+    async function fetchQuotes(syms) {
+      const arr = Array.isArray(syms) ? syms : [syms];
+      const results = {};
+
+      // Use cache for fresh data
+      const needed = arr.filter(s => {
+        if (FH_CACHE[s] && Date.now() - FH_CACHE[s].ts < FH_TTL) { results[s] = FH_CACHE[s].data; return false; }
+        return true;
+      });
+
+      if (!needed.length) { setConn('LIVE · CACHED', 'var(--grn)'); return results; }
+
+      // Demo mode — show clear "DEMO" label, no fake "live"
+      if (CFG.useDemo || (!CFG.finnhubKey && !CFG.alphaKey)) {
+        needed.forEach(s => { results[s] = demoQ(s); });
+        setConn('DEMO PRICES', 'var(--acc3)');
+        setUpd('⚠️ Demo mode — prices are estimates. Click ⚙ SETTINGS for live data.');
+        return results;
+      }
+
+      // Source 1: Finnhub
+      if (CFG.finnhubKey) {
+        const fh = await fhBatch(needed);
+        Object.assign(results, fh);
+        const miss = needed.filter(s => !results[s]);
+        // For index symbols not supported by Finnhub, try Yahoo
+        if (miss.length) Object.assign(results, await yahooFallback(miss));
+        needed.forEach(s => { if (!results[s]) results[s] = demoQ(s); });
+        setConn('LIVE · FINNHUB', 'var(--grn)');
+        setUpd('Finnhub live data · ' + new Date().toLocaleTimeString());
+        // Subscribe to WS for portfolio symbols
+        arr.filter(s => !s.startsWith('^')).forEach(wsSub);
+        return results;
+      }
+
+      // Source 2: Alpha Vantage
+      if (CFG.alphaKey) {
+        let hits = 0;
+        for (const sym of needed.slice(0, 8)) {
+          const q = await avQuote(sym);
+          if (q) { results[sym] = q; hits++; }
+          await sleep(300);
+        }
+        needed.forEach(s => { if (!results[s]) results[s] = demoQ(s); });
+        if (hits > 0) { setConn('LIVE · ALPHA VANTAGE', 'var(--grn)'); return results; }
+      }
+
+      // Source 3: Yahoo Finance (CORS — works sometimes from local file in Chrome)
+      Object.assign(results, await yahooFallback(needed));
+      needed.forEach(s => { if (!results[s]) results[s] = demoQ(s); });
+      const anyLive = Object.values(results).some(q => q._src === 'yahoo');
+      if (anyLive) { setConn('LIVE · YAHOO', 'var(--grn)'); return results; }
+
+      // All failed
+      setConn('NO API KEY', 'var(--acc3)');
+      setUpd('⚠️ Click ⚙ SETTINGS and enter your free Finnhub key for real prices');
+      return results;
+    }
+
+    async function yahooFallback(syms) {
+      const results = {};
+      try {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 5000);
+        const r = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms.join(',')}`, { signal: ctrl.signal, mode: 'cors' });
+        if (r.ok) {
+          const d = await r.json();
+          (d?.quoteResponse?.result || []).forEach(q => {
+            if (q.regularMarketPrice) { results[q.symbol] = { ...q, _src: 'yahoo', _ts: Date.now() }; FH_CACHE[q.symbol] = { data: results[q.symbol], ts: Date.now() }; }
+          });
+        }
+      } catch { }
+      return results;
+    }
+
+    // Demo data — clearly labeled, estimates only
+    const DEMO_PRICES = {
+      AAPL: 219.89, NVDA: 131.38, TSLA: 337.55, META: 711.25, AMZN: 224.19, MSFT: 409.75, GOOGL: 196.31,
+      AMD: 111.64, PLTR: 84.73, GME: 28.07, AMC: 3.02, MSTR: 316.45, COIN: 266.04, SOFI: 14.31,
+      HOOD: 43.84, RIVN: 12.06, NIO: 4.14, SHOP: 116.37, CRWD: 395.39, SNOW: 178.21,
+      LAC: 3.79, HIMS: 21.47, EPD: 33.61, BLNE: 1.42,
+      SPY: 597.74, QQQ: 519.15, IWM: 220.53, DIA: 436.04,
+      '^GSPC': 5983.99, '^IXIC': 19300.60, '^DJI': 43621.16, '^RUT': 2205.22,
+      '^VIX': 18.21, '^TNX': 4.42, 'DX-Y.NYB': 106.46, 'CL=F': 70.09, 'GC=F': 2948.80,
+      'BTC-USD': 88429, 'ETH-USD': 2480,
+      XLK: 228.50, XLF: 50.32, XLE: 87.15, XLV: 142.80, XLC: 99.14, XLI: 135.22,
+      XLB: 88.44, XLRE: 40.13, XLU: 79.22, XLP: 81.54,
+      MARA: 14.97, RIOT: 8.31, ARM: 148.82, UBER: 82.31, SMCI: 37.18, PANW: 193.74,
+      NET: 127.45, DDOG: 127.11, INTC: 20.82, BA: 171.40,
+    };
+    const DEMO_NAMES = {
+      AAPL: 'Apple Inc.', NVDA: 'NVIDIA Corp', TSLA: 'Tesla Inc.', META: 'Meta Platforms', AMZN: 'Amazon.com',
+      MSFT: 'Microsoft Corp', GOOGL: 'Alphabet Inc.', AMD: 'Advanced Micro Devices', PLTR: 'Palantir Technologies',
+      GME: 'GameStop Corp.', AMC: 'AMC Entertainment', MSTR: 'MicroStrategy', COIN: 'Coinbase',
+      SOFI: 'SoFi Technologies', HOOD: 'Robinhood Markets', RIVN: 'Rivian Automotive', NIO: 'NIO Inc.',
+      SHOP: 'Shopify', CRWD: 'CrowdStrike', SNOW: 'Snowflake', LAC: 'Lithium Americas', HIMS: 'Hims & Hers',
+      EPD: 'Enterprise Products', BLNE: 'Bluebird Bio', SPY: 'SPDR S&P 500 ETF', QQQ: 'Invesco QQQ',
+      IWM: 'iShares Russell 2K', DIA: 'SPDR Dow Jones ETF', '^GSPC': 'S&P 500', '^IXIC': 'NASDAQ Comp',
+      '^DJI': 'Dow Jones', '^RUT': 'Russell 2000', '^VIX': 'CBOE VIX', '^TNX': '10-Yr Treasury',
+      'DX-Y.NYB': 'USD Index', 'CL=F': 'WTI Crude Oil', 'GC=F': 'Gold', 'BTC-USD': 'Bitcoin', 'ETH-USD': 'Ethereum',
+      XLK: 'Tech', XLF: 'Finance', XLE: 'Energy', XLV: 'Healthcare', XLC: 'Communication', XLI: 'Industrials',
+      XLB: 'Materials', XLRE: 'Real Estate', XLU: 'Utilities', XLP: 'Staples',
+      MARA: 'Marathon Digital', RIOT: 'Riot Platforms', ARM: 'Arm Holdings', UBER: 'Uber',
+      SMCI: 'Super Micro Computer', PANW: 'Palo Alto Networks', NET: 'Cloudflare', DDOG: 'Datadog',
+      INTC: 'Intel Corp', BA: 'Boeing',
+    };
+    function demoQ(sym) {
+      const p = DEMO_PRICES[sym] || (50 + Math.random() * 200);
+      const c = +(Math.random() * 6 - 3).toFixed(2);
+      return {
+        symbol: sym, shortName: DEMO_NAMES[sym] || sym,
+        regularMarketPrice: p, regularMarketChange: +(p * c / 100).toFixed(3),
+        regularMarketChangePercent: c, regularMarketVolume: 5e6, averageVolume: 5e6,
+        regularMarketDayHigh: p * 1.01, regularMarketDayLow: p * 0.99,
+        fiftyTwoWeekHigh: p * 1.3, fiftyTwoWeekLow: p * 0.7, marketCap: null, _src: 'demo'
+      };
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // ══════════════════════════════════════════════════════
+    //  CHART
+    // ══════════════════════════════════════════════════════
+    function initChart() {
+      const ctx = document.getElementById('priceChart').getContext('2d');
+      S.chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [{
+            data: [], borderColor: '#00c6ff', borderWidth: 1.5, fill: true,
+            backgroundColor: 'rgba(0,198,255,0.04)', pointRadius: 0, tension: 0.2
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            x: { type: 'linear', display: false },
+            y: {
+              position: 'right', grid: { color: 'rgba(13,58,92,0.4)' },
+              ticks: {
+                color: '#4a7a9b', font: { family: 'Share Tech Mono', size: 10 },
+                callback: v => '$' + (v >= 1000 ? v.toLocaleString() : v.toFixed(v < 10 ? 3 : 2))
+              }
+            }
+          },
+          plugins: {
+            legend: { display: false }, tooltip: {
+              backgroundColor: 'rgba(8,24,40,0.96)', borderColor: '#0d3a5c', borderWidth: 1,
+              titleColor: '#00c6ff', bodyColor: '#cce8ff',
+              callbacks: {
+                title: i => { const d = new Date(i[0].parsed.x); return d.toLocaleTimeString(); },
+                label: c => ' $' + (c.parsed.y >= 1000 ? c.parsed.y.toLocaleString() : c.parsed.y.toFixed(c.parsed.y < 10 ? 3 : 2))
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function mockChartPts(base, pts) {
+      const d = []; let p = base; const now = Date.now();
+      for (let i = 0; i < pts; i++) { p *= 1 + (Math.random() - .48) * .008; d.push({ x: now - (pts - i) * 300000, y: +p.toFixed(4) }); }
+      return d;
+    }
+
+    async function updateChart(sym) {
+      document.getElementById('cSym').textContent = sym;
+      document.getElementById('cPrice').textContent = '...';
+      document.getElementById('cChg').innerHTML = '';
+
+      const [quotes] = await Promise.all([fetchQuotes([sym])]);
+      const q = quotes[sym];
+      if (q) {
+        const up = q.regularMarketChange >= 0;
+        const p = q.regularMarketPrice;
+        document.getElementById('cPrice').textContent = '$' + (p >= 1000 ? p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : p.toFixed(p < 10 ? 4 : 2));
+        document.getElementById('cChg').innerHTML = `<span class="${up ? 'pos' : 'neg'}">${up ? '▲' : '▼'} ${Math.abs(q.regularMarketChange).toFixed(p < 10 ? 4 : 2)} (${Math.abs(q.regularMarketChangePercent).toFixed(2)}%)</span>${q._src === 'demo' ? '<span style="color:var(--acc3);font-size:9px;margin-left:6px">DEMO</span>' : ''}`;
+        S.chart.data.datasets[0].borderColor = up ? '#00e676' : '#ff3b5c';
+        S.chart.data.datasets[0].backgroundColor = up ? 'rgba(0,230,118,0.04)' : 'rgba(255,59,92,0.04)';
+        S.prices[sym] = p;
+      }
+
+      // Try Finnhub candles, fall back to mock
+      let chartPts = null;
+      if (CFG.finnhubKey && !sym.startsWith('^')) {
+        const now = Math.floor(Date.now() / 1000);
+        const ranges = {
+          '1D': { from: now - 86400, res: '5' }, '1W': { from: now - 604800, res: '15' },
+          '1M': { from: now - 2592000, res: 'D' }, '3M': { from: now - 7776000, res: 'D' },
+          '1Y': { from: now - 31536000, res: 'W' }
+        };
+        const r = ranges[S.period] || ranges['1D'];
+        chartPts = await fhCandles(sym, r.from, now, r.res);
+      }
+      if (!chartPts) {
+        // Yahoo chart fallback
+        chartPts = await yahooChart(sym, S.period);
+      }
+      if (!chartPts || chartPts.length < 2) {
+        chartPts = mockChartPts(q?.regularMarketPrice || 100, { '1D': 78, '1W': 120, '1M': 90, '3M': 130, '1Y': 250 }[S.period] || 78);
+      }
+      S.chart.data.datasets[0].data = chartPts;
+      S.chart.update('none');
+    }
+
+    async function yahooChart(sym, period) {
+      const iv = { '1D': '5m', '1W': '1h', '1M': '1d', '3M': '1d', '1Y': '1wk' };
+      const rg = { '1D': '1d', '1W': '5d', '1M': '1mo', '3M': '3mo', '1Y': '1y' };
+      try {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 5000);
+        const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=${iv[period] || '5m'}&range=${rg[period] || '1d'}`, { signal: ctrl.signal });
+        const d = await r.json();
+        const res = d.chart?.result?.[0];
+        if (!res) return null;
+        const ts = res.timestamp || [], cl = res.indicators?.quote?.[0]?.close || [];
+        const pts = ts.map((t, i) => ({ x: t * 1000, y: cl[i] || null })).filter(p => p.y);
+        return pts.length > 2 ? pts : null;
+      } catch { return null; }
+    }
+
+    function setPer(el, p) {
+      document.querySelectorAll('.pbt').forEach(b => b.classList.remove('on'));
+      el.classList.add('on'); S.period = p; if (S.selSym) updateChart(S.selSym);
+    }
+    function selSym(sym) { S.selSym = sym; updateChart(sym); }
+
+    // ══════════════════════════════════════════════════════
+    //  PORTFOLIO
+    // ══════════════════════════════════════════════════════
+    function loadDemo() {
+      S.port = [{ sym: 'NVDA', sh: 20, cost: 131.38 }, { sym: 'TSLA', sh: 30, cost: 337.55 },
+      { sym: 'META', sh: 15, cost: 711.25 }, { sym: 'AMZN', sh: 25, cost: 224.19 },
+      { sym: 'MSFT', sh: 10, cost: 409.75 }, { sym: 'AMD', sh: 40, cost: 111.64 }, { sym: 'PLTR', sh: 50, cost: 84.73 }];
+      save(); renderPort(); toast('Demo Portfolio Loaded', '7 stocks added — click ⚙ SETTINGS for live prices', 'ai');
+    }
+
+    function addSt() {
+      const sym = document.getElementById('addSym').value.trim().toUpperCase();
+      const sh = parseFloat(document.getElementById('addSh').value) || 1;
+      const cost = parseFloat(document.getElementById('addCst').value) || 0;
+      if (!sym || sym.length > 7) return toast('Error', 'Enter a valid ticker', 'dn');
+      if (S.port.find(p => p.sym === sym)) return toast('Duplicate', sym + ' already in portfolio', '');
+      S.port.push({ sym, sh, cost });
+      ['addSym', 'addSh', 'addCst'].forEach(id => document.getElementById(id).value = '');
+      save(); renderPort(); toast('Added', sym + ' added', 'up');
+    }
+    function rmSt(sym) { S.port = S.port.filter(p => p.sym !== sym); save(); renderPort(); }
+
+    // fast=true means use cached prices (called from WS updates)
+    async function renderPort(fast = false) {
+      if (!S.port.length) {
+        document.getElementById('portList').innerHTML = '<div style="text-align:center;color:var(--dim);padding:20px;font-size:11px">No stocks yet</div>';
+        document.getElementById('portTotal').textContent = '$0.00';
+        document.getElementById('portPnl').textContent = '';
+        return;
+      }
+      const quotes = fast ? getCached(S.port.map(p => p.sym)) : await fetchQuotes(S.port.map(p => p.sym));
+      let tv = 0, tc = 0;
+      const html = S.port.map(p => {
+        const q = quotes[p.sym] || demoQ(p.sym);
+        const pr = q.regularMarketPrice, ch = q.regularMarketChangePercent, up = ch >= 0;
+        S.prevPrices[p.sym] = S.prices[p.sym] || pr; S.prices[p.sym] = pr;
+        if (!fast) checkAlert(p, q);
+        const val = pr * p.sh, cost = p.cost * p.sh, pnl = val - cost, pp = p.cost > 0 ? pnl / cost * 100 : 0;
+        tv += val; tc += cost;
+        const src = q._src === 'demo' ? '<span style="color:var(--acc3);font-size:8px;margin-left:3px">DEMO</span>' : '';
+        return `<div class="srow ${up ? 'up' : 'dn'}" onclick="selSym('${p.sym}')">
+      <div>
+        <div style="display:flex;align-items:center;gap:4px"><span class="ssym">${p.sym}</span>${src}</div>
+        <div class="sname">${q.shortName || p.sym}</div>
+        <div class="spnl" style="color:${pnl >= 0 ? 'var(--grn)' : 'var(--red)'}">${p.sh}sh·avg $${p.cost > 0 ? p.cost.toFixed(p.cost < 10 ? 3 : 2) : '—'}·${pnl >= 0 ? '+' : ''}$${Math.abs(pnl).toFixed(0)}(${pp.toFixed(1)}%)</div>
+      </div>
+      <div style="text-align:right">
+        <div class="sprice" style="color:${up ? 'var(--grn)' : 'var(--red)'}">$${pr >= 1000 ? pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : pr.toFixed(pr < 10 ? 3 : 2)}</div>
+        <div class="schg ${up ? 'pos' : 'neg'}">${up ? '▲' : '▼'}${Math.abs(ch).toFixed(2)}%</div>
+        <button class="xbtn" onclick="event.stopPropagation();rmSt('${p.sym}')">✕</button>
+      </div>
+    </div>`;
+      }).join('');
+      document.getElementById('portList').innerHTML = html;
+      const tpnl = tv - tc, tpp = tc > 0 ? tpnl / tc * 100 : 0;
+      document.getElementById('portTotal').textContent = '$' + tv.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('portPnl').innerHTML = `<span style="color:${tpnl >= 0 ? 'var(--grn)' : 'var(--red)'}">${tpnl >= 0 ? '▲' : '▼'} $${Math.abs(tpnl).toLocaleString('en-US', { minimumFractionDigits: 2 })} (${tpp.toFixed(2)}%)</span>`;
+      if (!fast) setUpd('Last update: ' + new Date().toLocaleTimeString());
+    }
+
+    function getCached(syms) {
+      const r = {};
+      syms.forEach(s => { r[s] = (FH_CACHE[s]?.data) || demoQ(s); });
+      return r;
+    }
+
+    // ── ALERTS ──────────────────────────────────────────────
+    function saveAl() {
+      S.alCfg.up = parseFloat(document.getElementById('aUp').value) || 3;
+      S.alCfg.dn = parseFloat(document.getElementById('aDown').value) || 3;
+      S.alCfg.vol = parseFloat(document.getElementById('aVol').value) || 200;
+      save(); toast('Saved', `±${S.alCfg.up}% price · ${S.alCfg.vol}% vol`, 'ai');
+    }
+    function checkAlert(h, q) {
+      if (q._src === 'demo') return; // no alerts on demo data
+      const sym = h.sym, ch = q.regularMarketChangePercent, vr = (q.regularMarketVolume / (q.averageVolume || 1)) * 100, now = Date.now();
+      if (Math.abs(ch) >= (ch > 0 ? S.alCfg.up : S.alCfg.dn)) {
+        const k = sym + '-p';
+        if (!S.alCool[k] || now - S.alCool[k] > 300000) {
+          S.alCool[k] = now;
+          const up = ch > 0, msg = `${sym} ${up ? '▲ UP' : '▼ DOWN'} ${Math.abs(ch).toFixed(2)}% → $${q.regularMarketPrice.toFixed(2)}`;
+          pushAl(sym, 'PRICE', msg, up ? '📈' : '📉');
+          toast(`${up ? '📈' : '📉'} ${sym}`, msg, up ? 'up' : 'dn');
+        }
+      }
+      if (vr >= S.alCfg.vol && q.regularMarketVolume > 0) {
+        const k = sym + '-v';
+        if (!S.alCool[k] || now - S.alCool[k] > 600000) {
+          S.alCool[k] = now;
+          const msg = `${sym} volume at ${Math.round(vr)}% of average`;
+          pushAl(sym, 'VOL SPIKE', msg, '⚡'); toast(`⚡ ${sym}`, msg, 'warn');
+        }
+      }
+    }
+    function pushAl(sym, type, msg, ico) {
+      const el = document.getElementById('alList');
+      if (el.querySelector('[style*="color:var(--dim)"]')) el.innerHTML = '';
+      const d = document.createElement('div'); d.className = 'arow new';
+      d.innerHTML = `<div style="font-size:16px;flex-shrink:0">${ico}</div><div><div class="asym">${sym}·${type}</div><div class="amsg">${msg}</div><div class="at">${new Date().toLocaleTimeString()}</div></div>`;
+      el.prepend(d);
+      if (Notification.permission === 'granted') new Notification(`INTELLIS:${sym}`, { body: msg });
+    }
+    function clearAl() { document.getElementById('alList').innerHTML = '<div style="text-align:center;color:var(--dim);padding:20px;font-size:11px">Cleared</div>'; }
+    if ('Notification' in window && Notification.permission === 'default') setTimeout(() => Notification.requestPermission(), 5000);
+
+    // ── WATCHLIST ────────────────────────────────────────────
+    function addWL() {
+      const sym = document.getElementById('wlIn').value.trim().toUpperCase();
+      if (!sym) return;
+      if (!S.wl.includes(sym)) S.wl.push(sym);
+      document.getElementById('wlIn').value = '';
+      save(); renderWL();
+    }
+    async function renderWL(fast = false) {
+      const quotes = fast ? getCached(S.wl) : await fetchQuotes(S.wl);
+      document.getElementById('wlList').innerHTML = S.wl.map(sym => {
+        const q = quotes[sym] || demoQ(sym), up = q.regularMarketChangePercent >= 0;
+        const p = q.regularMarketPrice;
+        return `<div class="srow ${up ? 'up' : 'dn'}" onclick="selSym('${sym}')">
+      <div><div class="ssym">${sym}</div><div class="sname">${q.shortName || sym}</div></div>
+      <div style="text-align:right">
+        <div class="sprice" style="color:${up ? 'var(--grn)' : 'var(--red)'}">$${p >= 1000 ? p.toLocaleString('en-US', { minimumFractionDigits: 2 }) : p.toFixed(p < 10 ? 3 : 2)}</div>
+        <div class="schg ${up ? 'pos' : 'neg'}">${up ? '▲' : '▼'}${Math.abs(q.regularMarketChangePercent).toFixed(2)}%</div>
+        <button class="xbtn" onclick="event.stopPropagation();S.wl=S.wl.filter(s=>s!=='${sym}');save();renderWL()">✕</button>
+      </div>
+    </div>`;
+      }).join('');
+    }
+
+    // ── MOVERS ──────────────────────────────────────────────
+    const SCAN = ['NVDA', 'TSLA', 'META', 'AMZN', 'AAPL', 'AMD', 'PLTR', 'CRWD', 'GME', 'AMC', 'MSTR', 'COIN', 'MARA', 'RIOT', 'SMCI', 'HOOD', 'RIVN', 'NIO', 'SHOP', 'ARM', 'UBER', 'SNOW', 'NET', 'SOFI'];
+    async function loadMovers() {
+      const quotes = await fetchQuotes(SCAN);
+      const sorted = Object.values(quotes).sort((a, b) => Math.abs(b.regularMarketChangePercent) - Math.abs(a.regularMarketChangePercent));
+      document.getElementById('mvList').innerHTML = sorted.slice(0, 15).map(q => {
+        const up = q.regularMarketChangePercent >= 0, vr = q.averageVolume > 0 ? q.regularMarketVolume / q.averageVolume : 1;
+        const tags = [];
+        if (Math.abs(q.regularMarketChangePercent) > 5) tags.push('<span class="tag thot">🔥 BIG MOVE</span>');
+        if (vr > 2) tags.push('<span class="tag tvol">⚡ HIGH VOL</span>');
+        if (vr > 2 && Math.abs(q.regularMarketChangePercent) > 3) tags.push('<span class="tag tbrk">🎯 SETUP</span>');
+        if (up && q.regularMarketChangePercent > 3) tags.push('<span class="tag tbul">▲ BULL</span>');
+        if (!up && Math.abs(q.regularMarketChangePercent) > 3) tags.push('<span class="tag tber">▼ SHORT</span>');
+        const p = q.regularMarketPrice;
+        const isDemoTag = q._src === 'demo' ? '<span class="tag" style="background:rgba(255,107,53,0.1);color:var(--acc3)">DEMO</span>' : '';
+        return `<div class="mv" onclick="selSym('${q.symbol}');ct(null,'ct-ai');document.getElementById('aiTk').value='${q.symbol}'">
+      <div>
+        <div class="mvsym">${q.symbol}</div>
+        <div class="mvname">${q.shortName || q.symbol}</div>
+        <div class="tags">${(tags.join('') || '<span class="tag" style="color:var(--dim)">Monitoring</span>') + isDemoTag}</div>
+        <div class="mvmeta">H:$${q.regularMarketDayHigh?.toFixed(2) || '—'} L:$${q.regularMarketDayLow?.toFixed(2) || '—'}</div>
+      </div>
+      <div>
+        <div class="mvpct ${up ? 'pos' : 'neg'}">${up ? '▲' : '▼'}${Math.abs(q.regularMarketChangePercent).toFixed(2)}%</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:12px;text-align:right">$${p >= 1000 ? p.toLocaleString('en-US', { minimumFractionDigits: 2 }) : p.toFixed(p < 10 ? 3 : 2)}</div>
+      </div>
+    </div>`;
+      }).join('');
+    }
+
+    // ── OPTIONS (curated, not live API — noted clearly) ────
+    function loadOpts() {
+      const opts = [
+        { s: 'NVDA', t: 'CALL', st: 140, ex: '3/21', v: 52000, p: '$3.1M', u: true, si: 'Aggressive Bullish Sweep' },
+        { s: 'SPY', t: 'CALL', st: 610, ex: '3/28', v: 145000, p: '$11.2M', u: true, si: 'Massive Bullish Bet' },
+        { s: 'TSLA', t: 'CALL', st: 370, ex: '3/7', v: 38000, p: '$2.1M', u: true, si: 'Bullish Momentum' },
+        { s: 'META', t: 'PUT', st: 680, ex: '3/14', v: 18000, p: '$1.4M', u: true, si: 'Bearish Hedge' },
+        { s: 'AMD', t: 'CALL', st: 120, ex: '3/21', v: 62000, p: '$4.2M', u: true, si: 'Aggressive Bull' },
+        { s: 'QQQ', t: 'CALL', st: 530, ex: '3/28', v: 97000, p: '$7.8M', u: true, si: 'Tech Sector Bull' },
+        { s: 'PLTR', t: 'CALL', st: 95, ex: '4/18', v: 75000, p: '$3.6M', u: true, si: 'High Conviction Bull' },
+        { s: 'MSTR', t: 'CALL', st: 350, ex: '3/21', v: 14000, p: '$2.2M', u: true, si: 'BTC Leveraged Play' },
+        { s: 'GME', t: 'CALL', st: 32, ex: '3/14', v: 38000, p: '$0.6M', u: true, si: 'Speculative Bet' },
+        { s: 'COIN', t: 'CALL', st: 290, ex: '3/28', v: 22000, p: '$1.8M', u: true, si: 'Crypto Bull' },
+        { s: 'AMZN', t: 'CALL', st: 235, ex: '3/14', v: 29000, p: '$2.4M', u: false, si: 'Neutral-Bullish' },
+        { s: 'HOOD', t: 'CALL', st: 50, ex: '4/18', v: 18000, p: '$0.9M', u: true, si: 'Retail Broker Bull' },
+      ];
+      document.getElementById('optList').innerHTML = opts.map(o => `
+    <div class="orow" onclick="selSym('${o.s}')">
+      <span style="font-family:'Orbitron',monospace;font-size:10px;color:var(--acc)">${o.s}</span>
+      <span><span class="${o.t === 'CALL' ? 'cb' : 'pb'}">${o.t}</span></span>
+      <span>$${o.st}</span>
+      <span>${(o.v / 1000).toFixed(0)}K</span>
+      <span style="color:var(--warn)">${o.p}</span>
+      <span>${o.u ? '<span class="ub">UNUSUAL</span> ' : ''}<span style="font-size:9px;color:var(--dim)">${o.si}</span></span>
+    </div>`).join('');
+    }
+
+    // ── SQUEEZE ──────────────────────────────────────────────
+    function loadSqueeze() {
+      const sq = [
+        { s: 'GME', n: 'GameStop', sf: 24.5, dtc: 4.2, cb: 12.5, sc: 84, cat: 'Reddit momentum + elevated call buying' },
+        { s: 'AMC', n: 'AMC Entertainment', sf: 31.2, dtc: 3.8, cb: 18.3, sc: 79, cat: 'High SI + options spiking' },
+        { s: 'MSTR', n: 'MicroStrategy', sf: 18.7, dtc: 2.1, cb: 22.1, sc: 72, cat: 'BTC squeeze correlation' },
+        { s: 'SMCI', n: 'Super Micro Computer', sf: 22.3, dtc: 3.5, cb: 35.0, sc: 70, cat: 'High borrow + AI momentum' },
+        { s: 'HOOD', n: 'Robinhood Markets', sf: 19.1, dtc: 2.8, cb: 14.2, sc: 68, cat: 'Retail platform squeeze' },
+        { s: 'SOFI', n: 'SoFi Technologies', sf: 14.8, dtc: 2.9, cb: 8.2, sc: 62, cat: 'Fintech + high retail ownership' },
+        { s: 'COIN', n: 'Coinbase', sf: 16.2, dtc: 3.1, cb: 11.5, sc: 65, cat: 'Crypto rally amplifier' },
+        { s: 'RIVN', n: 'Rivian Automotive', sf: 20.4, dtc: 3.4, cb: 16.8, sc: 61, cat: 'EV + high short interest' },
+      ];
+      document.getElementById('sqList').innerHTML = sq.map(s => {
+        const pr = S.prices[s.s] || DEMO_PRICES[s.s] || 50;
+        const ch = FH_CACHE[s.s]?.data?.regularMarketChangePercent || +(Math.random() * 6 - 2).toFixed(2);
+        const up = ch >= 0;
+        return `<div class="sqc" onclick="selSym('${s.s}')">
+      <div class="sqtop">
+        <div><div class="sqsym">${s.s}</div><div style="font-size:10px;color:var(--dim)">${s.n}</div></div>
+        <div class="sqsc">
+          Score:<b style="color:var(--warn)">${s.sc}</b>
+          <div class="sqbar"><div class="sqfill" style="width:${s.sc}%"></div></div>
+          <span class="${up ? 'pos' : 'neg'}">${up ? '▲' : '▼'}${Math.abs(ch).toFixed(2)}%</span>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--dim);margin-bottom:5px">${s.cat}</div>
+      <div class="sqg">
+        <div class="sqm"><span class="sqml">SHORT FLOAT</span><span class="sqmv">${s.sf}%</span></div>
+        <div class="sqm"><span class="sqml">DAYS COVER</span><span class="sqmv">${s.dtc}d</span></div>
+        <div class="sqm"><span class="sqml">BORROW RATE</span><span class="sqmv">${s.cb}%</span></div>
+      </div>
+    </div>`;
+      }).join('');
+    }
+
+    // ── SCREENER ────────────────────────────────────────────
+    async function runScr() {
+      const f = document.getElementById('scFilt').value;
+      const map = {
+        topg: ['NVDA', 'TSLA', 'PLTR', 'MSTR', 'COIN', 'GME', 'MARA', 'RIOT', 'SMCI', 'ARM'],
+        topl: ['INTC', 'BA', 'NIO', 'PFE', 'T', 'VZ', 'PARA', 'WBA', 'CVS', 'MPW'],
+        hvol: ['TSLA', 'NVDA', 'AAPL', 'AMZN', 'SPY', 'QQQ', 'AMD', 'MSFT', 'META', 'GME'],
+        '52h': ['NVDA', 'META', 'AMZN', 'MSFT', 'GOOGL', 'AAPL', 'AMD', 'PLTR', 'CRWD', 'PANW'],
+        '52l': ['INTC', 'BA', 'NIO', 'PFE', 'T', 'VZ', 'PARA', 'WBA', 'CVS', 'MPW'],
+        brk: ['AAPL', 'AMD', 'CRWD', 'PLTR', 'PANW', 'SNOW', 'DDOG', 'NET', 'GOOGL', 'MSFT']
+      };
+      const syms = map[f] || map.topg;
+      document.getElementById('scList').innerHTML = '<div style="text-align:center;padding:12px;color:var(--dim);font-size:11px">Loading...</div>';
+      const quotes = await fetchQuotes(syms);
+      document.getElementById('scList').innerHTML = syms.map(sym => {
+        const q = quotes[sym] || demoQ(sym), up = q.regularMarketChangePercent >= 0;
+        const p = q.regularMarketPrice;
+        return `<div class="scrow" onclick="selSym('${sym}')">
+      <span style="font-family:'Orbitron',monospace;font-size:10px;color:var(--acc)">${sym}</span>
+      <span style="font-size:10px;color:var(--dim)">${(q.shortName || '').substring(0, 14)}</span>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:10px">$${p >= 1000 ? p.toLocaleString('en-US', { minimumFractionDigits: 2 }) : p.toFixed(p < 10 ? 3 : 2)}</span>
+      <span class="${up ? 'pos' : 'neg'}" style="font-family:'Share Tech Mono',monospace;font-size:10px;padding:1px 3px;border-radius:2px">${up ? '+' : ''}${q.regularMarketChangePercent.toFixed(2)}%</span>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim)">${q.regularMarketVolume > 0 ? (q.regularMarketVolume / 1e6).toFixed(1) + 'M' : '—'}</span>
+    </div>`;
+      }).join('');
+    }
+
+    // ── MARKET DATA ──────────────────────────────────────────
+    async function loadMkt() {
+      const idxS = ['^GSPC', '^IXIC', '^DJI', '^RUT', 'SPY', 'QQQ', 'IWM', 'DIA'];
+      const idxN = { '^GSPC': 'S&P 500', '^IXIC': 'NASDAQ', '^DJI': 'Dow Jones', '^RUT': 'Russell 2K', 'SPY': 'SPY ETF', 'QQQ': 'QQQ ETF', 'IWM': 'IWM ETF', 'DIA': 'DIA ETF' };
+      const quotes = await fetchQuotes(idxS);
+      document.getElementById('idxList').innerHTML = idxS.map(s => {
+        const q = quotes[s] || demoQ(s), up = q.regularMarketChange >= 0, pct = q.regularMarketChangePercent;
+        const p = q.regularMarketPrice;
+        const src = q._src === 'demo' ? '<span style="color:var(--acc3);font-size:8px"> DEMO</span>' : '';
+        return `<div class="irow" onclick="selSym('${s}')">
+      <div><div class="iname">${idxN[s] || s}${src}</div><div class="mbar"><div class="mfill" style="width:${Math.min(100, 50 + pct * 10)}%"></div></div></div>
+      <div><div class="iprice" style="color:${up ? 'var(--grn)' : 'var(--red)'}">$${p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div><div class="ichg ${up ? 'pos' : 'neg'}">${up ? '▲' : '▼'}${Math.abs(pct).toFixed(2)}%</div></div>
+    </div>`;
+      }).join('');
+
+      const macS = ['^VIX', '^TNX', 'DX-Y.NYB', 'CL=F', 'GC=F', 'BTC-USD', 'ETH-USD'];
+      const macN = { '^VIX': 'VIX', '^TNX': '10Y Yield', 'DX-Y.NYB': 'USD Index', 'CL=F': 'WTI Oil', 'GC=F': 'Gold', 'BTC-USD': 'Bitcoin', 'ETH-USD': 'Ethereum' };
+      const mq = await fetchQuotes(macS);
+      document.getElementById('macList').innerHTML = macS.map(s => {
+        const q = mq[s] || demoQ(s), up = q.regularMarketChange >= 0, p = q.regularMarketPrice;
+        const dec = s === '^TNX' ? 3 : s.includes('-USD') || s.includes('=F') ? 0 : 2;
+        const src = q._src === 'demo' ? '<span style="color:var(--acc3);font-size:8px"> DEMO</span>' : '';
+        return `<div class="mrow"><span class="ml">${macN[s]}${src}</span><span class="mv2" style="color:${up ? 'var(--grn)' : 'var(--red)'}">$${p.toFixed(dec)} <span style="font-size:9px">${up ? '▲' : '▼'}${Math.abs(q.regularMarketChangePercent).toFixed(2)}%</span></span></div>`;
+      }).join('');
+
+      // F&G from VIX
+      const vix = (mq['^VIX'] || demoQ('^VIX')).regularMarketPrice;
+      const fg = Math.max(0, Math.min(100, Math.round(100 - vix * 2.8)));
+      document.getElementById('fgV').textContent = fg;
+      const fl = fg < 20 ? 'EXTREME FEAR' : fg < 40 ? 'FEAR' : fg < 60 ? 'NEUTRAL' : fg < 80 ? 'GREED' : 'EXTREME GREED';
+      const fc = fg < 40 ? 'var(--red)' : fg < 60 ? 'var(--warn)' : 'var(--grn)';
+      document.getElementById('fgT').textContent = fl; document.getElementById('fgV').style.color = fc; document.getElementById('fgT').style.color = fc;
+      document.getElementById('fgN').style.left = fg + '%';
+
+      // Sectors
+      const secS = ['XLK', 'XLF', 'XLE', 'XLV', 'XLC', 'XLI', 'XLB', 'XLRE', 'XLU', 'XLP'];
+      const secN = { XLK: 'Tech', XLF: 'Finance', XLE: 'Energy', XLV: 'Health', XLC: 'Comm', XLI: 'Industl', XLB: 'Matrl', XLRE: 'RealEst', XLU: 'Utils', XLP: 'Staples' };
+      const sq = await fetchQuotes(secS);
+      const srt = secS.map(s => ({ s, q: sq[s] || demoQ(s) })).sort((a, b) => b.q.regularMarketChangePercent - a.q.regularMarketChangePercent);
+      document.getElementById('secList').innerHTML = srt.map(({ s, q }) => {
+        const up = q.regularMarketChangePercent >= 0, pct = q.regularMarketChangePercent, w = Math.min(48, Math.abs(pct) * 14);
+        return `<div class="secrow" onclick="selSym('${s}')">
+      <span class="secname">${secN[s]}</span>
+      <div class="secbarw"><div class="secfill" style="width:${w}%;${up ? 'left:50%' : 'right:50%'};background:${up ? 'rgba(0,230,118,0.5)' : 'rgba(255,59,92,0.5)'}"></div></div>
+      <span class="secpct ${up ? 'pos' : 'neg'}">${up ? '+' : ''}${pct.toFixed(2)}%</span>
+    </div>`;
+      }).join('');
+    }
+
+    // ── NEWS (via Finnhub if key available, else static) ────
+    async function loadNews() {
+      let articles = [];
+      if (CFG.finnhubKey) {
+        try {
+          const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 6000);
+          const r = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${CFG.finnhubKey}`, { signal: ctrl.signal });
+          if (r.ok) {
+            const d = await r.json();
+            articles = d.slice(0, 10).map(n => ({
+              s: n.related || 'MARKET', src: n.source, h: n.headline,
+              t: new Date(n.datetime * 1000).toLocaleTimeString(), se: 'neu', url: n.url
+            }));
+          }
+        } catch { }
+      }
+      if (!articles.length) {
+        articles = [
+          { s: 'NVDA', src: 'Reuters', h: 'NVIDIA AI chip demand surges; data center revenue hits new records', t: '9:32 AM', se: 'bull' },
+          { s: 'AAPL', src: 'Bloomberg', h: 'Apple Intelligence features rolling out; developer adoption accelerating', t: '9:45 AM', se: 'bull' },
+          { s: 'TSLA', src: 'WSJ', h: 'Tesla Q1 delivery expectations lowered; EV competition intensifies in China', t: '10:12 AM', se: 'bear' },
+          { s: 'META', src: 'CNBC', h: 'Meta AI reaches 1 billion monthly active users across all platforms', t: '10:28 AM', se: 'bull' },
+          { s: 'FED', src: 'Reuters', h: 'Fed officials signal caution; want further progress on inflation before rate cuts', t: '11:08 AM', se: 'neu' },
+          { s: 'PLTR', src: "Barron's", h: 'Palantir wins $100M+ DoD AI contract; government pipeline accelerating', t: '11:30 AM', se: 'bull' },
+          { s: 'AMD', src: 'MarketWatch', h: 'AMD MI300X orders surge from hyperscalers; analyst raises PT to $175', t: '12:15 PM', se: 'bull' },
+          { s: 'GME', src: 'Fintel', h: 'GameStop short interest elevated at 24%; unusual options activity detected', t: '12:55 PM', se: 'neu' },
+          { s: 'BTC', src: 'CoinDesk', h: 'Bitcoin holds above $88K as institutional ETF demand remains strong', t: '1:20 PM', se: 'bull' },
+          { s: 'SMCI', src: 'Bloomberg', h: 'Super Micro Computer delays audit filing; accounting concerns resurface', t: '2:05 PM', se: 'bear' },
+        ];
+      }
+      // Update ticker
+      document.getElementById('tickScroll').innerHTML = [...articles, ...articles].map(n => `<span style="display:inline-flex;gap:6px"><span class="tlbl">[${n.s}]</span><span class="${n.se === 'bull' ? 'tu' : n.se === 'bear' ? 'td' : 'tn'}">${n.h}</span></span>`).join('<span style="margin:0 20px;color:var(--bdr)">◆</span>');
+      document.getElementById('nwsList').innerHTML = articles.map(n => `
+    <div class="nrow" ${n.url ? `onclick="window.open('${n.url}','_blank')"` : ''}>
+      <div class="ntop"><span class="nticker">${n.s}</span><span class="nsrc">${n.src}·${n.t}</span></div>
+      <div class="nhl">${n.h}</div>
+      <div class="nbot"><span></span><span class="sent ${n.se === 'bull' ? 'sbull' : n.se === 'bear' ? 'sbear' : 'sneu'}">${n.se === 'bull' ? '▲ Bullish' : n.se === 'bear' ? '▼ Bearish' : '◈ Neutral'}</span></div>
+    </div>`).join('');
+    }
+
+    // ── EARNINGS ────────────────────────────────────────────
+    function loadEarnings() {
+      const earn = [
+        { s: 'NVDA', n: 'NVIDIA Corp', d: 'Feb 26', w: 'AMC', e: '$4.42', r: '$22.0B' },
+        { s: 'META', n: 'Meta Platforms', d: 'Feb 26', w: 'AMC', e: '$6.73', r: '$48.5B' },
+        { s: 'MSFT', n: 'Microsoft', d: 'Feb 26', w: 'AMC', e: '$3.11', r: '$68.8B' },
+        { s: 'AAPL', n: 'Apple Inc.', d: 'Feb 27', w: 'AMC', e: '$2.26', r: '$124.3B' },
+        { s: 'AMZN', n: 'Amazon.com', d: 'Feb 27', w: 'AMC', e: '$1.49', r: '$187.3B' },
+        { s: 'GOOGL', n: 'Alphabet', d: 'Feb 25', w: 'AMC', e: '$2.13', r: '$96.7B' },
+        { s: 'COIN', n: 'Coinbase', d: 'Feb 27', w: 'AMC', e: '$1.89', r: '$1.8B' },
+        { s: 'HOOD', n: 'Robinhood', d: 'Feb 26', w: 'AMC', e: '$0.22', r: '$648M' },
+        { s: 'RIVN', n: 'Rivian', d: 'Feb 27', w: 'AMC', e: '-$0.68', r: '$1.4B' },
+      ];
+      document.getElementById('earnList').innerHTML = earn.map(e => `
+    <div class="erow" onclick="selSym('${e.s}')">
+      <div><div class="esym">${e.s}</div></div>
+      <div><div style="font-size:11px;color:var(--txt)">${e.n}</div><div style="font-size:9px;color:var(--dim);margin-top:1px">EPS est: ${e.e} · Rev: ${e.r}</div></div>
+      <div style="text-align:right"><div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--warn)">${e.d}</div><div style="margin-top:2px"><span class="${e.w === 'BMO' ? 'ebm' : 'eac'} ebadge">${e.w}</span></div></div>
+    </div>`).join('');
+    }
+
+    // ── AI ANALYSIS ──────────────────────────────────────────
+    async function runAI() {
+      const tk = document.getElementById('aiTk').value.trim().toUpperCase();
+      const tf = document.getElementById('aiTf').value;
+      if (!tk) return toast('Error', 'Enter a ticker', 'dn');
+      document.getElementById('aiOut').innerHTML = '<span style="color:var(--acc)">◈ Fetching live data + running AI analysis...</span>';
+      ct(null, 'ct-ai'); selSym(tk);
+      const quotes = await fetchQuotes([tk]);
+      const q = quotes[tk] || demoQ(tk);
+      const p = q.regularMarketPrice, ch = q.regularMarketChangePercent?.toFixed(2), h52 = q.fiftyTwoWeekHigh?.toFixed(2) || '—', l52 = q.fiftyTwoWeekLow?.toFixed(2) || '—';
+      const src = q._src === 'demo' ? '⚠️ Using estimated prices (add Finnhub key for live data)\n' : '';
+      const prompt = `Expert trading analyst. Analyze ${tk} for a ${tf} trade.
+
+${src}Current Price: $${p?.toFixed?.(2) || p} | Day Change: ${ch}% | 52W Range: $${l52}–$${h52}
+Data source: ${q._src || 'unknown'}
+
+Provide analysis in this EXACT format with specific dollar amounts:
+
+SIGNAL: [BUY / SELL / HOLD]
+CONFIDENCE: [X%] [LOW/MED/HIGH]
+
+ENTRY ZONE: $X.XX – $X.XX
+
+PRICE TARGETS:
+• T1: $X.XX (+X%) — reason
+• T2: $X.XX (+X%) — reason
+• T3: $X.XX (+X%) — extended target
+
+STOP LOSS: $X.XX (-X%) — technical reason
+
+RISK/REWARD: X:1
+
+CHART PATTERN: [specific pattern]
+
+SUPPORT: $X.XX | RESISTANCE: $X.XX
+
+TECHNICAL ANALYSIS: [2-3 sentences]
+
+CATALYSTS:
+• [specific event]
+• [specific event]
+
+RISKS:
+• [specific risk]
+• [specific risk]`;
+      try {
+        if (!CFG.anthropicKey) { fmtAI('⚠️ No Anthropic API key configured.\n\nTo enable AI analysis:\n1. Go to ⚙ SETTINGS → API Keys\n2. Enter your Anthropic key (sk-ant-...)\n3. Click SAVE\n\nGet a key at console.anthropic.com'); return; }
+        const res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': CFG.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify({ model: 'claude-3-5-sonnet-20241022', max_tokens: 900, messages: [{ role: 'user', content: prompt }] }) });
+        const d = await res.json();
+        fmtAI(d.content?.[0]?.text || 'No response');
+      } catch {
+        const pf = parseFloat(p) || 100;
+        fmtAI(`${src}SIGNAL: HOLD (AI API unavailable — connect to use live AI analysis)
+CONFIDENCE: 50% MED
+
+ENTRY ZONE: $${(pf * .98).toFixed(2)} – $${pf.toFixed(2)}
+Current price zone with volume confirmation needed.
+
+PRICE TARGETS:
+• T1: $${(pf * 1.04).toFixed(2)} (+4%) — First resistance
+• T2: $${(pf * 1.09).toFixed(2)} (+9%) — Major level
+• T3: $${(pf * 1.15).toFixed(2)} (+15%) — Extended
+
+STOP LOSS: $${(pf * .95).toFixed(2)} (-5%) — Below swing low
+
+RISK/REWARD: 2.1:1
+
+CHART PATTERN: Consolidation — awaiting breakout
+
+SUPPORT: $${(pf * .96).toFixed(2)} | RESISTANCE: $${(pf * 1.04).toFixed(2)}
+
+TECHNICAL ANALYSIS: Day change ${ch}%. 52-week range $${l52}–$${h52}. Watching for volume confirmation on any directional move.
+
+CATALYSTS:
+• Earnings season catalyst potential
+• Macro Fed/economic data impact
+
+RISKS:
+• Market-wide risk-off scenario
+• Key technical support breakdown`);
+      }
+    }
+    function fmtAI(txt) {
+      let h = txt
+        .replace(/^SIGNAL: (BUY.*)/m, '<span class="aisec">◈ SIGNAL</span><span class="aibuy">▲ BUY</span>')
+        .replace(/^SIGNAL: (SELL.*)/m, '<span class="aisec">◈ SIGNAL</span><span class="aisell">▼ SELL</span>')
+        .replace(/^SIGNAL: (HOLD.*)/m, '<span class="aisec">◈ SIGNAL</span><span class="aihold">◈ HOLD</span>')
+        .replace(/^(CONFIDENCE:|ENTRY ZONE:|PRICE TARGETS:|STOP LOSS:|RISK\/REWARD:|CHART PATTERN:|SUPPORT:.*|TECHNICAL ANALYSIS:|CATALYSTS:|RISKS:)/mg, '<span class="aisec">◈ $1</span>')
+        .replace(/(\$[\d,]+\.?\d*)/g, '<span class="aiprice">$1</span>')
+        .replace(/\n/g, '<br>');
+      document.getElementById('aiOut').innerHTML = h;
+    }
+    async function quickQ() {
+      const q = document.getElementById('qAsk').value.trim(); if (!q) return;
+      ct(null, 'ct-ai'); document.getElementById('aiOut').innerHTML = '<span style="color:var(--acc)">◈ Processing...</span>';
+      try {
+        if (!CFG.anthropicKey) { document.getElementById('aiOut').innerHTML = '<span style="color:var(--warn)">⚠️ Enter Anthropic key in ⚙ SETTINGS to enable AI.</span>'; return; }
+        const res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': CFG.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify({ model: 'claude-3-5-sonnet-20241022', max_tokens: 800, messages: [{ role: 'user', content: `Expert stock market analyst. Concise answer with specific price levels:\n${q}` }] }) });
+        const d = await res.json();
+        document.getElementById('aiOut').innerHTML = (d.content?.[0]?.text || '').replace(/\n/g, '<br>');
+      } catch { document.getElementById('aiOut').innerHTML = 'AI unavailable.'; }
+      document.getElementById('qAsk').value = '';
+    }
+
+    // ── API KEY MANAGEMENT ───────────────────────────────────
+    function saveSetupKey() {
+      const k = document.getElementById('setupFhIn').value.trim();
+      if (!k) return;
+      CFG.finnhubKey = k; localStorage.setItem('fh_key', k);
+      document.getElementById('setupFhSt').innerHTML = 'Status: <span style="color:var(--grn)">✅ Saved — testing...</span>';
+      testFinnhub(k);
+      document.getElementById('setupKeysSaved').style.display = 'block';
+    }
+    function saveKey(type) {
+      if (type === 'finnhub') {
+        const k = document.getElementById('fhIn').value.trim();
+        if (!k) return;
+        CFG.finnhubKey = k; localStorage.setItem('fh_key', k);
+        document.getElementById('fhSt').innerHTML = 'Status: <span style="color:var(--grn)">✅ Saved — testing...</span>';
+        testFinnhub(k);
+        toast('Finnhub key saved', 'Testing connection...', 'ai');
+
+      } else if (type === 'alpaca') {
+        const k = document.getElementById('alKeyIn').value.trim();
+        const s = document.getElementById('alSecIn').value.trim();
+        if (!k || !s) return;
+        CFG.alpacaKey = k; localStorage.setItem('al_key', k);
+        CFG.alpacaSecret = s; localStorage.setItem('al_sec', s);
+        document.getElementById('alSt').innerHTML = 'Status: <span style="color:var(--grn)">✅ Credentials Saved</span>';
+        connectAlpaca();
+        toast('Alpaca Connected', 'Matrix scanner active', 'up');
+      } else if (type === 'anthropic') {
+        const k = document.getElementById('antIn').value.trim();
+        if (!k) return;
+        CFG.anthropicKey = k; localStorage.setItem('ant_key', k);
+        document.getElementById('antSt').innerHTML = 'Status: <span style="color:var(--grn)">✅ Saved</span>';
+        toast('Anthropic key saved', 'AI Analysis is now enabled', 'ai');
+      } else {
+        const k = document.getElementById('avIn').value.trim();
+        if (!k) return;
+        CFG.alphaKey = k; localStorage.setItem('av_key', k);
+        document.getElementById('avSt').innerHTML = 'Status: <span style="color:var(--grn)">✅ Saved</span>';
+        toast('Alpha Vantage key saved', 'Backup data source configured', 'ai');
+      }
+    }
+
+    async function testFinnhub(key) {
+      try {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 6000);
+        const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${key}`, { signal: ctrl.signal });
+        const d = await r.json();
+        if (d.c && d.c > 0) {
+          document.getElementById('fhSt').innerHTML = `Status: <span style="color:var(--grn)">✅ Connected — AAPL: $${d.c.toFixed(2)} (live)</span>`;
+          toast('🟢 Finnhub Connected!', `Live price test: AAPL $${d.c.toFixed(2)}`, 'up');
+          connectWS(); connectAlpaca();
+        } else {
+          document.getElementById('fhSt').innerHTML = 'Status: <span style="color:var(--red)">❌ Invalid key or API error</span>';
+          toast('Finnhub Error', 'Check your API key', 'dn');
+        }
+      } catch {
+        document.getElementById('fhSt').innerHTML = 'Status: <span style="color:var(--warn)">⚠️ Network error — key saved, will retry on refresh</span>';
+      }
+    }
+
+    function skipSetup() {
+      CFG.useDemo = true; localStorage.setItem('useDemo', '1');
+      closeM('setupModal');
+      toast('Demo Mode', 'Using reference prices — change anytime via ⚙ SETTINGS', 'warn');
+      launch();
+    }
+    function launchWithKeys() {
+      const setupKey = document.getElementById('setupFhIn');
+      if (setupKey && setupKey.value.trim()) { CFG.finnhubKey = setupKey.value.trim(); localStorage.setItem('fh_key', CFG.finnhubKey); }
+      if (!CFG.finnhubKey && !CFG.alphaKey) { toast('No keys', 'Enter a key first, or click SKIP', 'warn'); return; }
+      CFG.useDemo = false; localStorage.removeItem('useDemo');
+      closeM('setupModal'); launch();
+    }
+
+    // Populate existing keys on modal open
+    function updateKeyStatus() {
+      if (CFG.finnhubKey) {
+        const fhIn = document.getElementById('fhIn'); if (fhIn) fhIn.value = CFG.finnhubKey;
+        const fhSt = document.getElementById('fhSt'); if (fhSt) fhSt.innerHTML = 'Status: <span style="color:var(--grn)">✅ Key configured</span>';
+      }
+      if (CFG.alphaKey) {
+        const avIn = document.getElementById('avIn'); if (avIn) avIn.value = CFG.alphaKey;
+        const avSt = document.getElementById('avSt'); if (avSt) avSt.innerHTML = 'Status: <span style="color:var(--grn)">✅ Key configured</span>';
+      }
+      if (CFG.anthropicKey) {
+        const antIn = document.getElementById('antIn'); if (antIn) antIn.value = CFG.anthropicKey;
+        const antSt = document.getElementById('antSt'); if (antSt) antSt.innerHTML = 'Status: <span style="color:var(--grn)">✅ Key configured</span>';
+      }
+    }
+    function switchSettings(el, id) {
+      document.querySelectorAll('#settingsModal .mtab').forEach(t => t.classList.remove('on'));
+      document.querySelectorAll('#settingsModal .mbpane').forEach(p => p.classList.remove('on'));
+      el.classList.add('on'); document.getElementById(id).classList.add('on');
+    }
+
+    // ── IMPORT / EXPORT ──────────────────────────────────────
+    function switchM(el, id) {
+      document.querySelectorAll('.mtab').forEach(t => t.classList.remove('on'));
+      document.querySelectorAll('.mbpane').forEach(p => p.classList.remove('on'));
+      el.classList.add('on'); document.getElementById(id).classList.add('on');
+    }
+    function doCSV(e) {
+      const file = e.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const lines = ev.target.result.split('\n').map(l => l.trim()).filter(l => l);
+        if (!lines.length) return toast('Error', 'Empty file', 'dn');
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/['"]/g, ''));
+        const si = headers.findIndex(h => ['symbol', 'ticker', 'stock', 'sym'].some(k => h.includes(k)));
+        const shi = headers.findIndex(h => ['shares', 'quantity', 'qty', 'units'].some(k => h.includes(k)));
+        const ci = headers.findIndex(h => ['average cost', 'avg cost', 'cost basis', 'average price', 'price paid'].some(k => h.includes(k)));
+        if (si < 0) return toast('Error', 'Cannot find Symbol column', 'dn');
+        S.impData = [];
+        lines.slice(1).forEach(l => {
+          const cols = l.split(',').map(c => c.trim().replace(/['"]/g, ''));
+          const sym = (cols[si] || '').toUpperCase().replace(/[^A-Z]/g, '');
+          if (sym && sym.length >= 1 && sym.length <= 6) S.impData.push({ sym, sh: parseFloat(cols[shi] || 1) || 1, cost: parseFloat(cols[ci] || 0) || 0 });
+        });
+        if (!S.impData.length) return toast('Error', 'No valid positions found', 'dn');
+        document.getElementById('csvPrev').style.display = 'block';
+        document.getElementById('csvRows').innerHTML = S.impData.slice(0, 8).map(r => `<div class="prow"><span style="font-family:'Orbitron',monospace;color:var(--acc);font-size:10px">${r.sym}</span><span>—</span><span>${r.sh}</span><span>$${r.cost.toFixed(2)}</span></div>`).join('') + (S.impData.length > 8 ? `<div style="text-align:center;color:var(--dim);font-size:10px;padding:4px">+${S.impData.length - 8} more</div>` : '');
+        toast('CSV Parsed', `Found ${S.impData.length} positions`, 'ai');
+      };
+      reader.readAsText(file);
+    }
+    function doSS(e) {
+      const file = e.target.files[0]; if (!file) return;
+      const prev = document.getElementById('ssPrev'); prev.style.display = 'block'; prev.src = URL.createObjectURL(file);
+      document.getElementById('ssStatus').innerHTML = '<span style="color:var(--acc)">🤖 AI reading screenshot...</span>';
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        const b64 = ev.target.result.split(',')[1];
+        try {
+          const res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 800, messages: [{ role: 'user', content: [{ type: 'image', source: { type: 'base64', media_type: file.type || 'image/jpeg', data: b64 } }, { type: 'text', text: 'Extract ALL stock positions from this broker screenshot. Return ONLY a JSON array, no other text: [{"sym":"AAPL","sh":10,"cost":150.00}]\nsym=ticker symbol, sh=shares/quantity, cost=avg cost per share (0 if not visible).' }] }] }) });
+          const d = await res.json();
+          const txt = d.content?.[0]?.text || '[]';
+          const match = txt.match(/\[[\s\S]*\]/);
+          if (match) {
+            S.impData = JSON.parse(match[0]).map(p => ({ sym: (p.sym || '').toUpperCase(), sh: parseFloat(p.sh || 1), cost: parseFloat(p.cost || 0) })).filter(p => p.sym && p.sym.length >= 1 && p.sym.length <= 6);
+            document.getElementById('ssPrevBox').style.display = 'block';
+            document.getElementById('ssRows').innerHTML = S.impData.map(r => `<div class="prow"><span style="font-family:'Orbitron',monospace;color:var(--acc);font-size:10px">${r.sym}</span><span>—</span><span>${r.sh}</span><span>$${r.cost.toFixed(2)}</span></div>`).join('');
+            document.getElementById('ssStatus').innerHTML = `<span style="color:var(--grn)">✅ Found ${S.impData.length} positions — click IMPORT</span>`;
+          } else throw new Error();
+        } catch { document.getElementById('ssStatus').innerHTML = '<span style="color:var(--warn)">⚠️ Could not read screenshot. Try CSV or Manual.</span>'; }
+      };
+      reader.readAsDataURL(file);
+    }
+    function addManRow() { const tb = document.getElementById('manRows'); const tr = document.createElement('tr'); tr.innerHTML = `<td><input type="text" placeholder="TSLA" class="ms" style="text-transform:uppercase"></td><td><input type="number" placeholder="10" class="msh"></td><td><input type="number" placeholder="200" class="mc"></td><td><button onclick="this.closest('tr').remove()" style="background:none;border:none;color:var(--dim);cursor:pointer">✕</button></td>`; document.getElementById('manRows').appendChild(tr); }
+    function doImport() {
+      let data = S.impData;
+      if (document.getElementById('im-man').classList.contains('on')) {
+        data = [];
+        document.querySelectorAll('#manRows tr').forEach(tr => {
+          const sym = (tr.querySelector('.ms')?.value || '').toUpperCase().trim();
+          const sh = parseFloat(tr.querySelector('.msh')?.value || 1) || 1;
+          const cost = parseFloat(tr.querySelector('.mc')?.value || 0) || 0;
+          if (sym) data.push({ sym, sh, cost });
+        });
+      }
+      if (!data?.length) return toast('Error', 'No data to import', 'dn');
+      let added = 0, skip = 0;
+      data.forEach(p => { if (S.port.find(x => x.sym === p.sym)) { skip++; return; } S.port.push(p); added++; });
+      save(); renderPort(); closeM('importModal');
+      toast('Imported!', `${added} stocks added${skip ? ' · ' + skip + ' duplicates skipped' : ''}. Fetching live prices...`, 'ai');
+    }
+    function expCSV() {
+      const rows = ['Symbol,Shares,Avg Cost,Current Price,P&L $,P&L %'];
+      S.port.forEach(p => { const pr = S.prices[p.sym] || p.cost; rows.push(`${p.sym},${p.sh},${p.cost},${pr.toFixed(2)},${((pr - p.cost) * p.sh).toFixed(2)},${(p.cost > 0 ? (pr - p.cost) / p.cost * 100 : 0).toFixed(2)}`); });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([rows.join('\n')], { type: 'text/csv' })); a.download = `apex-portfolio-${new Date().toISOString().split('T')[0]}.csv`; a.click();
+      closeM('exportModal'); toast('Exported', 'Saved as CSV', 'ai');
+    }
+    function expJSON() {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(S.port.map(p => ({ symbol: p.sym, shares: p.sh, avgCost: p.cost, currentPrice: S.prices[p.sym] || p.cost })), null, 2)], { type: 'application/json' })); a.download = `apex-portfolio-${new Date().toISOString().split('T')[0]}.json`; a.click();
+      closeM('exportModal'); toast('Exported', 'Saved as JSON', 'ai');
+    }
+    function expText() {
+      navigator.clipboard?.writeText(S.port.map(p => { const pr = S.prices[p.sym] || p.cost; return `${p.sym}: ${p.sh}sh @ $${p.cost.toFixed(2)} avg | Now: $${pr.toFixed(2)} | P&L: $${((pr - p.cost) * p.sh).toFixed(2)}`; }).join('\n')).then(() => { closeM('exportModal'); toast('Copied', 'Portfolio on clipboard', 'ai'); });
+    }
+
+    // ── TABS ─────────────────────────────────────────────────
+    function lt(el, id) { document.querySelectorAll('#lt-port,#lt-wl,#lt-al,#lt-earn').forEach(p => p.classList.remove('on')); document.querySelectorAll('.panel .tab').forEach(t => t.classList.remove('on')); document.getElementById(id).classList.add('on'); el.classList.add('on'); }
+    function ct(el, id) { document.querySelectorAll('[id^="ct-"]').forEach(p => p.classList.remove('on')); document.querySelectorAll('.ctr .tab').forEach(t => t.classList.remove('on')); document.getElementById(id).classList.add('on'); if (el) el.classList.add('on'); else document.querySelectorAll('.ctr .tab').forEach(t => { if (t.getAttribute('onclick')?.includes(id)) t.classList.add('on'); }); }
+    function rt(el, id) { document.querySelectorAll('#rt-idx,#rt-mac,#rt-sec,#rt-nws').forEach(p => p.classList.remove('on')); document.querySelectorAll('.rp .tab').forEach(t => t.classList.remove('on')); document.getElementById(id).classList.add('on'); el.classList.add('on'); }
+
+    // ── MODAL ─────────────────────────────────────────────────
+    function openM(id) { if (id === 'settingsModal') updateKeyStatus(); document.getElementById(id).classList.remove('hide'); }
+    function closeM(id) { document.getElementById(id).classList.add('hide'); }
+    document.querySelectorAll('.mbg').forEach(m => m.addEventListener('click', e => { if (e.target === m && m.id !== 'setupModal') m.classList.add('hide'); }));
+
+    // ── TOAST ─────────────────────────────────────────────────
+    function toast(title, body, type = '') {
+      const t = document.createElement('div'); t.className = `toast ${type}`;
+      t.innerHTML = `<div class="tt">${title}</div><div class="tb">${body}</div>`;
+      t.onclick = () => t.remove();
+      document.getElementById('toasts').prepend(t);
+      setTimeout(() => t.remove(), 5500);
+    }
+
+    // ── PERSIST ───────────────────────────────────────────────
+    function save() {
+      try {
+        const payload = { port: S.port, wl: S.wl, alCfg: S.alCfg, selSym: S.selSym, ts: Date.now() };
+        localStorage.setItem('apexData', JSON.stringify(payload));
+        // Legacy key too for compatibility
+        localStorage.setItem('apex3', JSON.stringify(payload));
+      } catch (e) { console.warn('Save failed:', e); }
+    }
+
+    function loadSaved() {
+      try {
+        // Try new key first, fall back to old
+        const raw = localStorage.getItem('apexData') || localStorage.getItem('apex3');
+        if (!raw) return;
+        const d = JSON.parse(raw);
+        if (Array.isArray(d.port) && d.port.length > 0) {
+          S.port = d.port;
+          console.log('Loaded', d.port.length, 'portfolio positions from storage');
+        }
+        if (Array.isArray(d.wl) && d.wl.length > 0) S.wl = d.wl;
+        if (d.selSym) S.selSym = d.selSym;
+        if (d.alCfg && typeof d.alCfg === 'object') {
+          S.alCfg = { ...S.alCfg, ...d.alCfg };
+          // Update UI fields if they exist
+          const up = document.getElementById('aUp'), dn = document.getElementById('aDown'), vol = document.getElementById('aVol');
+          if (up) up.value = S.alCfg.up;
+          if (dn) dn.value = S.alCfg.dn;
+          if (vol) vol.value = S.alCfg.vol;
+        }
+      } catch (e) { console.warn('Load failed:', e); }
+    }
+
+    async function fullRefresh() {
+      const btn = document.getElementById('rfBtn'); btn.textContent = '↻ ...';
+      await Promise.all([renderPort(), renderWL(), loadMkt(), loadMovers()]);
+      btn.textContent = '↻ REFRESH';
+    }
+
+    // ── LAUNCH ────────────────────────────────────────────────
+    async function launch() {
+      initChart();
+      loadOpts(); loadSqueeze(); loadEarnings();
+      // Stagger data loads to avoid Finnhub 429 rate limit on startup
+      // Each section gets its own window so they don't all fire at once
+      await renderPort();                          // Portfolio first
+      await sleep(1000);
+      await renderWL();                            // Then watchlist
+      await sleep(1000);
+      await loadMkt();                             // Then market indices
+      await sleep(1000);
+      loadMovers();                                // Movers async (non-blocking)
+      loadNews();                                  // News async (non-blocking)
+      await sleep(500);
+      runScr(); updateChart(S.selSym || 'SPY');
+      if (CFG.finnhubKey) { connectWS(); connectAlpaca(); }
+      // Poll intervals — staggered to avoid simultaneous requests
+      setInterval(renderPort, 45000);
+      setInterval(renderWL, 60000);
+      setInterval(loadMovers, 90000);
+      setInterval(loadMkt, 90000);
+      setInterval(() => { if (S.selSym) updateChart(S.selSym); }, 120000);
+      toast('INTELLIS MARKET MATRIX AI v5 ONLINE', CFG.finnhubKey ? 'Live Finnhub data streaming' : 'Demo mode — click ⚙ SETTINGS for live prices', CFG.finnhubKey ? 'up' : 'warn');
+    }
+
+    // ── PWA — INSTALLABLE APP ─────────────────────────────────
+    const _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+    const _isStandalone = window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone === true;
+    function showIOSBanner() {
+      if (!_isIOS || _isStandalone || sessionStorage.getItem('iosDim')) return;
+      const b = document.createElement('div');
+      b.id = 'iosBanner';
+      b.innerHTML = `<div style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#081828,#0a1e30);border-top:2px solid #00c6ff;padding:14px 18px;padding-bottom:calc(14px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;font-family:Rajdhani,sans-serif;animation:slideUp .4s ease">`
+        + `<div style="font-size:32px">📲</div>`
+        + `<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff">Install INTELLIS MARKET MATRIX AI</div>`
+        + `<div style="font-size:12px;color:#4a7a9b;line-height:1.5">Tap <b style="color:#00c6ff">Share ⎋</b> then <b style="color:#00c6ff">Add to Home Screen</b></div></div>`
+        + `<button onclick="document.getElementById('iosBanner').remove();sessionStorage.setItem('iosDim',1)" style="background:none;border:1px solid #0d3a5c;color:#4a7a9b;font-size:18px;cursor:pointer;padding:4px 10px;border-radius:4px">✕</button>`
+        + `</div>`;
+      document.body.appendChild(b);
+    }
+
+    let _deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); _deferredPrompt = e; const btn = document.getElementById('installBtn'); if (btn) btn.style.display = ''; });
+    function installPWA() { if (_deferredPrompt) { _deferredPrompt.prompt(); _deferredPrompt.userChoice.then(r => { if (r.outcome === 'accepted') toast('Installed!', 'INTELLIS MARKET MATRIX AI is now an app', 'up'); _deferredPrompt = null; document.getElementById('installBtn').style.display = 'none'; }); } }
+
+    // Register service worker via Blob for single-file PWA
+    if ('serviceWorker' in navigator) {
+      const swCode = `self.addEventListener('install',e=>{e.waitUntil(caches.open('apex-v4').then(c=>c.addAll(['/'])));self.skipWaiting();});
+self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>new Response('Offline',{status:503}))));});
+self.addEventListener('activate',e=>{e.waitUntil(clients.claim());});`;
+      try {
+        const swBlob = new Blob([swCode], { type: 'text/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => { });
+      } catch (e) { }
+    }
+
+    // Inject manifest for PWA
+    try {
+      const manifest = {
+        name: 'INTELLIS MARKET MATRIX AI v5', short_name: 'INTELLIS', start_url: '.', display: 'standalone', background_color: '#00050a', theme_color: '#00f2ff',
+        icons: [{ src: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23020b14%22 width=%22100%22 height=%22100%22 rx=%2215%22/><text x=%2250%25%22 y=%2255%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2248%22>📈</text></svg>', sizes: 'any', type: 'image/svg+xml' }]
+      };
+      const mLink = document.createElement('link'); mLink.rel = 'manifest';
+      mLink.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(manifest));
+      document.head.appendChild(mLink);
+    } catch (e) { }
+
+    // ── INIT ──────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSaved();
+      showIOSBanner();
+
+      if (S.port.length > 0) console.log('Portfolio restored:', S.port.map(p => p.sym).join(', '));
+
+      // If keys exist or demo chosen, go straight to dashboard
+      if (CFG.finnhubKey || CFG.alphaKey || CFG.useDemo) {
+        launch();
+      } else {
+        // First run: show setup modal
+        openM('setupModal');
+      }
+    });
+
+    // Auto-save every 2 minutes + save on exit
+    setInterval(save, 120000);
+    window.addEventListener('beforeunload', () => { save(); });
+    window.addEventListener('pagehide', () => { save(); });
+  </script>
+</body>
+
+</html>

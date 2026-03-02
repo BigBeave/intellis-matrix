@@ -1,0 +1,19 @@
+symbol,shares,cost_basis,account,type,notes
+PAPL,2000,0,Roth IRA,Stock,Cost basis unknown - update manually
+STUB,6,0,Roth IRA,Stock,Cost basis unknown - update manually
+SOFI,300,0,Investing,Stock,Cost basis unknown - update manually
+BLNE,250,0,Investing,Stock,Cost basis unknown - update manually
+BABA,10,0,Investing,Stock,Cost basis unknown - update manually
+GPUSB,13.69,0,Investing,Stock,Cost basis unknown - update manually
+HOOD,0,0,Investing,Stock,Position closed/fractional
+BTC,0.00003167,0,Investing,Crypto,Via Robinhood Crypto
+ETH,0.000834,0,Investing,Crypto,Via Robinhood Crypto
+UBER,80,0,Roth IRA,Option Call,Strike $80 Exp 2/27 - 2 contracts
+HIMS,20,0,Roth IRA,Option Call,Strike $20 Exp 3/20 - 2 contracts
+LAC,3.5,0,Roth IRA,Option Call,Strike $3.50 Exp 1/15/27 - 1 contract
+HIMS,15,0,Investing,Option Call,Strike $15 Exp 3/13 - 1 contract
+SOFI,22,0,Investing,Option Call,Strike $22 Exp 3/27 - 1 contract
+SOFI,20,0,Investing,Option Call,Strike $20 Exp 4/17 - 3 contracts
+SOFI,20,0,Investing,Option Call,Strike $20 Exp 5/15 - 1 contract
+SOFI,23,0,Investing,Option Call,Strike $23 Exp 6/18 - 2 contracts
+PLUG,0.5,0,Investing,Option Call,Strike $0.50 Exp 1/21/28 - 2 contracts

@@ -1,0 +1,12 @@
+{
+  "name": "intellis-market-matrix-ai",
+  "version": "5.0.0",
+  "description": "Supercharged real-time trading dashboard with Alpaca momentum scanning and Squawk box audio.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y serve ."
+  },
+  "keywords": ["pwa", "trading", "alpaca", "finnhub", "matrix", "ai"],
+  "author": "Brandon Beavers / Intellis Matrix",
+  "license": "MIT"
+}
