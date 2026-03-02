@@ -1815,26 +1815,33 @@
         height: auto;
         overflow-y: auto;
       }
+
       .layout {
         display: flex;
         flex-direction: column;
         overflow-y: visible;
       }
+
       header {
         flex-direction: column;
         gap: 10px;
         padding: 10px;
       }
+
       .hright {
         justify-content: center;
       }
-      .panel, .ctr, .rp {
+
+      .panel,
+      .ctr,
+      .rp {
         border-left: none;
         border-right: none;
         border-bottom: 2px solid var(--acc);
         max-height: 500px;
         flex-shrink: 0;
       }
+
       .mbg .modal {
         width: 95vw !important;
       }
@@ -1933,13 +1940,15 @@
             <div class="key-status" id="avSt">Status: <span style="color:var(--dim)">Not configured</span></div>
           </div>
           <div class="api-source" style="border-color:rgba(0,198,255,0.3)">
-            <div><span class="api-badge badge-free">🤖 AI</span> <span class="api-badge badge-free">OPTIONAL</span>
+            <div><span class="api-badge badge-free">🤖 AI</span> <span class="api-badge badge-best">100% FREE</span>
             </div>
-            <div class="api-title">Anthropic (Claude AI) <a href="https://console.anthropic.com/" target="_blank"
-                rel="noopener" style="color:var(--acc);font-size:10px;font-weight:600;margin-left:8px">→ get key</a>
+            <div class="api-title">Google Gemini AI <a href="https://aistudio.google.com/app/apikey" target="_blank"
+                rel="noopener" style="color:var(--acc);font-size:10px;font-weight:600;margin-left:8px">→ get free
+                key</a>
             </div>
-            <div class="api-desc">Enables the AI Analysis tab. Without this, AI shows placeholder data.</div>
-            <div class="key-row"><input id="antIn" placeholder="sk-ant-..."
+            <div class="api-desc">Enables the AI Analysis tab. Gemini offers a robust free tier with NO credit card
+              required.</div>
+            <div class="key-row"><input id="antIn" placeholder="AIZA..."
                 style="flex:1;font-family:Share Tech Mono,monospace;font-size:11px"><button class="btn"
                 style="font-size:9px;padding:5px 12px" onclick="saveKey('anthropic')">SAVE</button></div>
             <div class="key-status" id="antSt">Status: <span style="color:var(--dim)">Not configured</span></div>
@@ -3316,10 +3325,10 @@ RISKS:
 • [specific risk]
 • [specific risk]`;
       try {
-        if (!CFG.anthropicKey) { fmtAI('⚠️ No Anthropic API key configured.\n\nTo enable AI analysis:\n1. Go to ⚙ SETTINGS → API Keys\n2. Enter your Anthropic key (sk-ant-...)\n3. Click SAVE\n\nGet a key at console.anthropic.com'); return; }
-        const res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': CFG.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify({ model: 'claude-3-5-sonnet-20241022', max_tokens: 900, messages: [{ role: 'user', content: prompt }] }) });
+        if (!CFG.anthropicKey) { fmtAI('⚠️ No AI API key configured.\n\nTo enable AI analysis:\n1. Go to ⚙ SETTINGS → API Keys\n2. Enter your Google Gemini key (begins with AIZA...)\n3. Click SAVE\n\nGet a completely FREE key at: aistudio.google.com/app/apikey'); return; }
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CFG.anthropicKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
         const d = await res.json();
-        fmtAI(d.content?.[0]?.text || 'No response');
+        fmtAI(d.candidates?.[0]?.content?.parts?.[0]?.text || 'No response');
       } catch {
         const pf = parseFloat(p) || 100;
         fmtAI(`${src}SIGNAL: HOLD (AI API unavailable — connect to use live AI analysis)
@@ -3366,10 +3375,10 @@ RISKS:
       const q = document.getElementById('qAsk').value.trim(); if (!q) return;
       ct(null, 'ct-ai'); document.getElementById('aiOut').innerHTML = '<span style="color:var(--acc)">◈ Processing...</span>';
       try {
-        if (!CFG.anthropicKey) { document.getElementById('aiOut').innerHTML = '<span style="color:var(--warn)">⚠️ Enter Anthropic key in ⚙ SETTINGS to enable AI.</span>'; return; }
-        const res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': CFG.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify({ model: 'claude-3-5-sonnet-20241022', max_tokens: 800, messages: [{ role: 'user', content: `Expert stock market analyst. Concise answer with specific price levels:\n${q}` }] }) });
+        if (!CFG.anthropicKey) { document.getElementById('aiOut').innerHTML = '<span style="color:var(--warn)">⚠️ Enter Gemini key in ⚙ SETTINGS to enable free AI.</span>'; return; }
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CFG.anthropicKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: `Expert stock market analyst. Concise answer with specific price levels:\n${q}` }] }] }) });
         const d = await res.json();
-        document.getElementById('aiOut').innerHTML = (d.content?.[0]?.text || '').replace(/\n/g, '<br>');
+        document.getElementById('aiOut').innerHTML = (d.candidates?.[0]?.content?.parts?.[0]?.text || '').replace(/\n/g, '<br>');
       } catch { document.getElementById('aiOut').innerHTML = 'AI unavailable.'; }
       document.getElementById('qAsk').value = '';
     }
@@ -3406,7 +3415,7 @@ RISKS:
         if (!k) return;
         CFG.anthropicKey = k; localStorage.setItem('ant_key', k);
         document.getElementById('antSt').innerHTML = 'Status: <span style="color:var(--grn)">✅ Saved</span>';
-        toast('Anthropic key saved', 'AI Analysis is now enabled', 'ai');
+        toast('Gemini AI key saved', '100% Free AI Analysis is now enabled', 'ai');
       } else {
         const k = document.getElementById('avIn').value.trim();
         if (!k) return;
